@@ -1,54 +1,37 @@
-/* script.js — Nej_Studio
-   - controls: entry overlay (go web)
-   - background music (play/pause) — optional if music.mp3 exists
-   - soon modal (open/close + accessibility: focus trap, ESC)
-   - toast feedback
-*/
+// script.js — Nej_Studio (панелі, overlay, музика, Soon modal, toast, history)
 
-/* ---------- Helpers ---------- */
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+/* helpers */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
 
-function showToast(text, ms = 3000) {
-  let toast = $('#toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toast';
-    toast.className = 'toast';
-    document.body.appendChild(toast);
-  }
-  toast.textContent = text;
-  toast.classList.add('show');
-  clearTimeout(toast._t);
-  toast._t = setTimeout(() => toast.classList.remove('show'), ms);
+function showToast(text, ms = 3000){
+  const t = $('#toast');
+  t.textContent = text;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=> t.classList.remove('show'), ms);
 }
 
-/* ---------- Entry overlay (GO WEB) ---------- */
+/* ENTRY OVERLAY (go web) */
 const entryOverlay = $('#entryOverlay');
 const goBtn = $('#goBtn');
 const mainContent = $('#mainContent');
-
-if (goBtn && entryOverlay && mainContent) {
+if(goBtn){
   goBtn.addEventListener('click', async () => {
-    // fade out
     entryOverlay.classList.add('hidden');
-    setTimeout(() => {
-      if (entryOverlay.parentNode) entryOverlay.style.display = 'none';
-    }, 420);
-
-    // reveal main content
+    setTimeout(()=> entryOverlay.style.display='none', 420);
+    mainContent.setAttribute('aria-hidden','false');
     mainContent.classList.remove('blurred');
 
-    // try play background music if exists (graceful)
-    if (window.__NejMusic) {
+    // try autoplay music
+    if(window.__NejMusic) {
       try { await window.__NejMusic.play(); showToast('Музика увімкнена'); }
-      catch (e) { showToast('Автовідтворення заблоковано — натисніть ▶ у шапці'); }
+      catch(e){ showToast('Автовідтворення може бути заблоковане'); }
     }
   });
 }
 
-/* ---------- Background music (optional) ---------- */
-// We'll attach audio to window.__NejMusic so it's accessible in console if needed
+/* BACKGROUND MUSIC */
 (function initMusic(){
   const audio = new Audio('music.mp3');
   audio.loop = true;
@@ -56,15 +39,13 @@ if (goBtn && entryOverlay && mainContent) {
   audio.volume = 0.34;
   window.__NejMusic = audio;
 
-  // If page has a music control button (optional), wire it
-  const musicBtn = $('.music-btn');
-  if (musicBtn) {
-    musicBtn.style.display = 'inline-flex';
+  const musicBtn = $('#musicControl');
+  if(musicBtn){
     const setIcon = (isPlaying) => musicBtn.textContent = isPlaying ? '⏸' : '▶';
     musicBtn.addEventListener('click', async () => {
-      if (audio.paused) {
+      if(audio.paused){
         try { await audio.play(); setIcon(true); showToast('Музика увімкнена'); }
-        catch (e) { showToast('Натисніть ще раз, щоб дозволити відтворення'); }
+        catch(e){ showToast('Натисніть ще раз, щоб дозволити відтворення'); }
       } else {
         audio.pause(); setIcon(false); showToast('Музика вимкнена');
       }
@@ -72,89 +53,136 @@ if (goBtn && entryOverlay && mainContent) {
   }
 })();
 
-/* ---------- Soon Modal (open / close / accessibility) ---------- */
+/* PANEL SYSTEM (header nav => full-screen panel switching)
+   - uses panelContainer and panels with data-panel attributes
+   - supports browser history (pushState) so user can press Back
+*/
+const panelContainer = document.getElementById('panelContainer');
+const panels = $$('.panel');
+const navButtons = $$('.nav-btn');
+const panelCloseButtons = $$('.panel-close');
+
+function openPanel(name, push = true){
+  const panel = panels.find(p => p.dataset.panel === name);
+  if(!panel || !panelContainer) return;
+  // show container
+  panelContainer.setAttribute('aria-hidden','false');
+  // hide other panels
+  panels.forEach(p => p.style.display = (p === panel ? 'block' : 'none'));
+  // accessibility
+  panelContainer._previouslyFocused = document.activeElement;
+  panel.setAttribute('tabindex','-1');
+  panel.focus();
+  // hide main content visually but keep background
+  mainContent.setAttribute('aria-hidden','true');
+  // push history
+  if(push) history.pushState({panel:name}, '', `#${name}`);
+}
+
+function closePanels(push = true){
+  if(!panelContainer) return;
+  panelContainer.setAttribute('aria-hidden','true');
+  // restore main content
+  mainContent.setAttribute('aria-hidden','false');
+  if(panelContainer._previouslyFocused) panelContainer._previouslyFocused.focus();
+  if(push) history.pushState({}, '', window.location.pathname);
+}
+
+/* wire nav buttons */
+navButtons.forEach(b=>{
+  b.addEventListener('click', (e)=>{
+    const name = b.dataset.panel;
+    openPanel(name, true);
+  });
+});
+
+/* panel close */
+panelCloseButtons.forEach(btn=>{
+  btn.addEventListener('click', ()=> closePanels(true));
+});
+
+/* close by clicking outside panel */
+if(panelContainer){
+  panelContainer.addEventListener('click', (e)=>{
+    if(e.target === panelContainer) closePanels(true);
+  });
+}
+
+/* handle back/forward */
+window.addEventListener('popstate', (e)=>{
+  if(e.state && e.state.panel){
+    // open panel from state
+    openPanel(e.state.panel, false);
+  } else {
+    // no panel in state -> close
+    closePanels(false);
+  }
+});
+
+/* on load: if URL has hash open panel */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const hash = location.hash.replace('#','');
+  if(hash){
+    // small timeout to allow layout
+    setTimeout(()=> openPanel(hash, false), 120);
+  }
+});
+
+/* SOON modal (focus trap, ESC, backdrop) */
 const soonBtn = $('#soonBtn');
 const soonModal = $('#soonModal');
 const closeSoon = $('#closeSoon');
 
-if (soonBtn && soonModal) {
-  // open modal
-  soonBtn.addEventListener('click', () => openModal(soonModal, soonBtn) );
-
-  // close buttons
-  if (closeSoon) closeSoon.addEventListener('click', () => closeModal(soonModal) );
-
-  // backdrop click closes
-  soonModal.addEventListener('click', (e) => {
-    if (e.target === soonModal) closeModal(soonModal);
-  });
-
-  // ESC key closes and traps focus
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && soonModal.getAttribute('aria-hidden') === 'false') {
-      closeModal(soonModal);
-    }
-  });
-}
-
-/* Focus trap implementation */
-function openModal(modal, opener) {
-  if (!modal) return;
-  modal.setAttribute('aria-hidden', 'false');
+function openModal(modal){
+  if(!modal) return;
+  modal.setAttribute('aria-hidden','false');
   modal.style.display = 'flex';
-
-  // Save previously focused element to restore later
   modal._previouslyFocused = document.activeElement;
-
-  // Collect focusable elements
-  const focusable = modal.querySelectorAll('a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])');
+  const focusable = modal.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
   modal._focusable = Array.from(focusable);
-  if (modal._focusable.length) modal._focusable[0].focus();
-
-  // Trap tab
-  modal._handleKey = (e) => {
-    if (e.key !== 'Tab') return;
-    const f = modal._focusable;
-    if (f.length === 0) { e.preventDefault(); return; }
-    const idx = f.indexOf(document.activeElement);
-    if (e.shiftKey) {
-      if (idx === 0) { e.preventDefault(); f[f.length - 1].focus(); }
+  if(modal._focusable.length) modal._focusable[0].focus();
+  modal._handleKey = (e)=>{
+    if(e.key !== 'Tab') return;
+    const f = modal._focusable; const idx = f.indexOf(document.activeElement);
+    if(e.shiftKey){
+      if(idx === 0){ e.preventDefault(); f[f.length-1].focus(); }
     } else {
-      if (idx === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      if(idx === f.length-1){ e.preventDefault(); f[0].focus(); }
     }
   };
   document.addEventListener('keydown', modal._handleKey);
-  // Announce
-  showToast('Відкрито вікно');
+  showToast('Відкрито');
 }
 
-function closeModal(modal) {
-  if (!modal) return;
-  modal.setAttribute('aria-hidden', 'true');
+function closeModal(modal){
+  if(!modal) return;
+  modal.setAttribute('aria-hidden','true');
   modal.style.display = 'none';
-  // restore focus
-  try { if (modal._previouslyFocused) modal._previouslyFocused.focus(); } catch(e){}
-  // remove handler
-  if (modal._handleKey) { document.removeEventListener('keydown', modal._handleKey); modal._handleKey = null; }
+  try{ if(modal._previouslyFocused) modal._previouslyFocused.focus(); }catch(e){}
+  if(modal._handleKey) { document.removeEventListener('keydown', modal._handleKey); modal._handleKey = null; }
   showToast('Закрито');
 }
 
-/* ---------- Smooth anchor scroll for header links ---------- */
-$$('header nav a').forEach(a => {
-  const href = a.getAttribute('href');
-  if (href && href.startsWith('#')) {
-    a.addEventListener('click', (e) => {
+if(soonBtn && soonModal){
+  soonBtn.addEventListener('click', ()=> openModal(soonModal));
+  if(closeSoon) closeSoon.addEventListener('click', ()=> closeModal(soonModal));
+  soonModal.addEventListener('click', (e)=> { if(e.target === soonModal) closeModal(soonModal); });
+  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape' && soonModal.getAttribute('aria-hidden') === 'false') closeModal(soonModal); });
+}
+
+/* smooth anchor behaviour for internal links in main content */
+$$('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    const href = a.getAttribute('href');
+    if(href.length > 1){
       e.preventDefault();
       const target = document.querySelector(href);
-      if (target) target.scrollIntoView({behavior: 'smooth', block:'start'});
-    });
-  }
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
 });
 
-/* ---------- Defensive: ensure #toast exists in DOM ---------- */
-if (!$('#toast')) {
-  const t = document.createElement('div');
-  t.id = 'toast';
-  t.className = 'toast';
-  document.body.appendChild(t);
+/* ensure a #toast exists */
+if(!$('#toast')) {
+  const t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t);
 }

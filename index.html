@@ -1,86 +1,128 @@
 <!doctype html>
 <html lang="uk">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Nej_Studio</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nej_Studio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <div class="brand">Nej_Studio</div>
-  <nav aria-label="Головна навігація">
-    <a href="#services">Послуги</a>
-    <a href="#socials">Соцмережі</a>
-    <a href="#contact">Контакт</a>
+  <div class="brand" id="brand">Nej_Studio</div>
+
+  <nav aria-label="Головна навігація" class="main-nav">
+    <button class="nav-btn" data-panel="description">Опис</button>
+    <button class="nav-btn" data-panel="socials">Соцмережі</button>
+    <button class="nav-btn" data-panel="contact">Контакт</button>
   </nav>
-  <button id="soonBtn" class="header-btn">Soon</button>
+
+  <div class="header-actions">
+    <button id="soonBtn" class="header-btn" aria-haspopup="dialog">Soon</button>
+    <button id="musicControl" class="music-btn" aria-pressed="false" title="Управління музикою">▶</button>
+  </div>
 </header>
 
 <!-- ENTRY OVERLAY -->
 <div id="entryOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Вступний екран">
-  <button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+  <div class="overlay-inner">
+    <h1 class="overlay-title">Nej_Studio</h1>
+    <p class="overlay-sub">Креативна студія — сайти, брендинг, візитки</p>
+    <button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+  </div>
 </div>
 
-<main id="mainContent" class="blurred" tabindex="-1">
-  <!-- HOME / HERO -->
+<!-- MAIN CONTENT -->
+<main id="mainContent" class="site-main" tabindex="-1" aria-hidden="true">
   <section class="hero" id="home" aria-labelledby="hero-title">
     <h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
-    <p>Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
-    <a href="#services" class="btn">Наші послуги</a>
+    <p class="lead">Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
   </section>
 
-  <!-- SERVICES -->
   <section id="services" class="services" aria-labelledby="services-title">
-    <h2 id="services-title">Наші послуги</h2>
+    <h2 id="services-title">Що ми пропонуємо</h2>
     <div class="grid">
-      <div class="card"><h3>Web-дизайн</h3><p>Адаптивні сайти, лендінги, портфоліо.</p></div>
-      <div class="card"><h3>Брендинг</h3><p>Логотипи, айдентика, стиль компанії.</p></div>
-      <div class="card"><h3>Дизайн візиток</h3><p>Робимо дизайн візиток на будь-який смак та з айдентики бренду.</p></div>
+      <article class="card">
+        <h3>Web-дизайн</h3>
+        <p>Адаптивні сайти, лендінги, портфоліо — чистий код і приємний UX.</p>
+      </article>
+
+      <article class="card">
+        <h3>Брендинг</h3>
+        <p>Логотипи, айдентика, візуальна стратегія для впізнаваності бізнесу.</p>
+      </article>
+
+      <article class="card">
+        <h3>Дизайн візиток</h3>
+        <p>Унікальні візитки, що відповідають айдентиці та стилю компанії.</p>
+      </article>
     </div>
   </section>
 
-  <!-- SOCIALS -->
   <section id="socials" class="services" aria-labelledby="social-title">
     <h2 id="social-title">Соціальні мережі</h2>
     <div class="grid">
-      <a class="card" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank">
+      <a class="card link-card" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank" rel="noopener noreferrer">
         <h3>Instagram</h3>
-        <p>Наш офіційний профіль</p>
+        <p>Наш офіційний профіль — приклади робіт і процесу.</p>
       </a>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer id="contact">
-    <p>&copy; 2025 Nej_Studio — Всі права та дизайн належать тільки Nej_Studio</p>
-    <p class="contact">
-      <a href="mailto:marcus395k@gmail.com" class="email-link">
-        <img src="gmail-icon.png" alt="Gmail" class="email-icon" aria-hidden="true">Написати мені
+  <footer id="contact" class="services" aria-labelledby="contact-title">
+    <h2 id="contact-title">Контакт</h2>
+    <p>Зв'язатися: 
+      <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink">
+        marcus395k@gmail.com
       </a>
     </p>
+    <p class="small">© 2025 Nej_Studio — Всі права належать тільки Nej_Studio</p>
   </footer>
 </main>
 
-<!-- MODAL SOON -->
-<div id="soonModal" class="modal" aria-hidden="true">
-  <div class="modal-content">
-    <button id="closeSoon" class="close-btn" aria-label="Закрити модальне вікно">✖</button>
-    <h1>soon</h1>
-    <p>Невелика інформація про структуру сайту або нові функції:</p>
-    <div class="icon-grid">
-      <div class="icon-card">🏠 Home</div>
-      <div class="icon-card">💻 Web</div>
-      <div class="icon-card">🎨 Design</div>
-      <div class="icon-card">📱 Mobile</div>
-      <div class="icon-card">📝 Blog</div>
-      <div class="icon-card">📧 Contact</div>
+<!-- PANEL CONTAINER -->
+<div id="panelContainer" class="panel-container" aria-hidden="true">
+  <div class="panel panel--description" data-panel="description" role="region" aria-label="Опис">
+    <button class="panel-close" data-close>← Назад</button>
+    <div class="panel-inner">
+      <h2>Опис студії</h2>
+      <p>Nej_Studio створює індивідуальні рішення: від простих лендінгів до повної айдентики.</p>
+      <div class="panel-grid">
+        <div class="panel-card"><strong>1000 грн</strong><div>1-сторінковий лендінг</div></div>
+        <div class="panel-card"><strong>2500–5000 грн</strong><div>Сайт 2–5 сторінок, динаміка</div></div>
+        <div class="panel-card"><strong>Брандинг</strong><div>Пакет айдентики, візитки, лого</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel--socials" data-panel="socials" role="region" aria-label="Соцмережі">
+    <button class="panel-close" data-close>← Назад</button>
+    <div class="panel-inner">
+      <h2>Соцмережі</h2>
+      <p>Підтримка і контент-план для Instagram.</p>
+      <a class="btn-link" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank" rel="noopener noreferrer">Перейти в Instagram</a>
+    </div>
+  </div>
+
+  <div class="panel panel--contact" data-panel="contact" role="region" aria-label="Контакт">
+    <button class="panel-close" data-close>← Назад</button>
+    <div class="panel-inner">
+      <h2>Контакти</h2>
+      <p>Напишіть нам на пошту або замовте консультацію.</p>
+      <a class="btn-link" href="mailto:marcus395k@gmail.com">Написати на електронну пошту</a>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
+<!-- MODAL SOON -->
+<div id="soonModal" class="modal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-label="Soon">
+    <button id="closeSoon" class="close-btn" aria-label="Закрити модальне вікно">✖</button>
+    <h1>soon</h1>
+    <p>Тут будуть нові функції — слідкуйте за оновленнями.</p>
+  </div>
+</div>
+
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="script.js"></script>
