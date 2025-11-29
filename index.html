@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nej_Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">Nej_Studio</div>
+    <nav aria-label="Головна навігація">
+      <a href="#services">Послуги</a>
+      <a href="#contact">Контакт</a>
+    </nav>
+
+    <!-- Music control (hidden until reveal) -->
+    <div id="musicControlWrap" aria-hidden="true">
+      <button id="musicControl" class="music-btn" aria-pressed="false" title="Play music">
+        ▶
+      </button>
+    </div>
+  </header>
+
+  <!-- ENTRY OVERLAY -->
+  <div id="entryOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Вступний екран">
+    <button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main id="mainContent" class="blurred" tabindex="-1">
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
+      <p>Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
+      <a href="#services" class="btn">Наші послуги</a>
+    </section>
+
+    <section id="services" class="services" aria-labelledby="services-title">
+      <h2 id="services-title">Наші послуги</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Web-дизайн</h3>
+          <p>Адаптивні сайти, лендінги, портфоліо.</p>
+        </div>
+        <div class="card">
+          <h3>Брендинг</h3>
+          <p>Логотипи, айдентика, стиль компанії.</p>
+        </div>
+        <div class="card">
+          <h3>Дизайн візиток</h3>
+          <p>Робимо дизайн візиток на будь-який смак та з айдентики бренду.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <p>&copy; 2025 Nej_Studio — Всі права та дизайн належать тільки Nej_Studio</p>
+      <p class="contact">
+        <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink">
+          <img src="gmail-icon.png" alt="Gmail" class="email-icon" aria-hidden="true">
+          Написати мені
+        </a>
+      </p>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

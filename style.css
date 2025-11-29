@@ -1,0 +1,159 @@
+:root{
+  --violet:#6a00ff;
+  --dark:#0b0e15;
+  --accent:#4cc9f0;
+  --text:#eef6ff;
+  --muted: rgba(255,255,255,0.75);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 20% 20%, var(--violet) 0%, var(--dark) 55%),
+    radial-gradient(circle at 80% 70%, #4a0080 0%, transparent 60%),
+    var(--dark);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+/* Header */
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 6%;
+  background:rgba(0,0,0,0.18);
+  backdrop-filter:blur(8px);
+  z-index:40;
+}
+.brand{font-weight:700;font-size:20px;color:var(--text);letter-spacing:0.6px}
+nav a{color:var(--text);text-decoration:none;margin-left:20px;opacity:0.95}
+nav a:hover{color:var(--accent)}
+
+/* Music control */
+#musicControlWrap{display:flex;align-items:center;gap:8px}
+.music-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;height:40px;border-radius:8px;border:0;
+  background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+  color:var(--muted);cursor:pointer;font-weight:700;font-size:16px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.4);
+  transition:transform .14s ease, background .14s ease, color .14s ease;
+  backdrop-filter:blur(4px);
+}
+.music-btn:hover{transform:translateY(-3px); color:var(--accent)}
+#musicControlWrap[aria-hidden="true"]{visibility:hidden;opacity:0;height:0;pointer-events:none}
+
+/* Overlay (entry screen) */
+.overlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+  background:rgba(3,6,12,0.35);
+  backdrop-filter: blur(8px);
+  transition:opacity .45s ease, visibility .45s ease;
+}
+.overlay.hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+/* go button */
+.go-btn{
+  appearance:none;border:0;
+  background:linear-gradient(90deg,var(--violet),#8b3cff);
+  color:white;padding:18px 40px;border-radius:12px;font-weight:700;font-size:20px;cursor:pointer;
+  box-shadow:0 12px 30px rgba(106,0,255,0.18);
+  transform:translateY(0);transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.go-btn:active{transform:translateY(2px)}
+.go-btn:hover{box-shadow:0 18px 48px rgba(106,0,255,0.22)}
+
+/* Main content blurred state */
+.blurred{
+  filter:blur(8px) saturate(.92);
+  transition:filter .6s ease, opacity .4s ease;
+  pointer-events:none;
+}
+.blurred.revealed{
+  filter:blur(0) saturate(1);
+  pointer-events:auto;
+}
+
+/* Hero */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:120px 8% 80px;
+}
+.hero h1{font-size:48px;line-height:1.06;max-width:900px;margin-bottom:14px}
+.hero p{font-size:18px;max-width:720px;opacity:0.85;margin-bottom:26px}
+.btn{
+  display:inline-block;padding:12px 26px;background:var(--accent);color:#001014;border-radius:10px;text-decoration:none;font-weight:700;
+}
+
+/* Services */
+.services{padding:80px 8% 120px}
+.services h2{font-size:32px;margin-bottom:26px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.card{
+  background:rgba(255,255,255,0.03);padding:22px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* Footer */
+footer{
+  padding:36px 8%;
+  text-align:center;
+  background:rgba(0,0,0,0.15);
+  backdrop-filter:blur(4px);
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+footer p{margin-bottom:8px;opacity:0.85}
+.contact a{
+  display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;
+  background:linear-gradient(90deg,#6a00ff,#8b3cff);color:#fff;font-weight:600;text-decoration:none;
+  transition:transform .2s ease, box-shadow .2s ease;
+  box-shadow: 0 6px 20px rgba(106,0,255,0.16);
+}
+/* pulse animation for Gmail button */
+@keyframes pulse {
+  0% { box-shadow:0 6px 20px rgba(106,0,255,0.16); transform:translateY(0) scale(1); }
+  50% { box-shadow:0 22px 60px rgba(106,0,255,0.16); transform:translateY(-2px) scale(1.02); }
+  100% { box-shadow:0 6px 20px rgba(106,0,255,0.16); transform:translateY(0) scale(1); }
+}
+.contact a.pulse { animation: pulse 2.6s infinite ease-in-out; }
+
+.contact a:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(106,0,255,0.28)}
+.email-icon{width:24px;height:24px;display:inline-block}
+
+/* Toast */
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:rgba(0,0,0,0.6);color:#fff;padding:10px 14px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:80;font-size:14px;
+}
+.toast.show{opacity:1;pointer-events:auto}
+
+/* responsive */
+@media (max-width:720px){
+  .hero h1{font-size:30px}
+  header{padding:0 5%}
+  .go-btn{padding:14px 28px;font-size:18px}
+  .music-btn{width:36px;height:36px}
+}
