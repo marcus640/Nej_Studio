@@ -1,71 +1,88 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nej_Studio</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Nej_Studio</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div class="brand">Nej_Studio</div>
-    <nav aria-label="Головна навігація">
-      <a href="#services">Послуги</a>
-      <a href="#contact">Контакт</a>
-    </nav>
 
-    <!-- Music control (hidden until reveal) -->
-    <div id="musicControlWrap" aria-hidden="true">
-      <button id="musicControl" class="music-btn" aria-pressed="false" title="Play music">
-        ▶
-      </button>
+<header>
+  <div class="brand">Nej_Studio</div>
+  <nav aria-label="Головна навігація">
+    <a href="#services">Послуги</a>
+    <a href="#socials">Соцмережі</a>
+    <a href="#contact">Контакт</a>
+  </nav>
+  <button id="soonBtn" class="header-btn">Soon</button>
+</header>
+
+<!-- ENTRY OVERLAY -->
+<div id="entryOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Вступний екран">
+  <button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+</div>
+
+<main id="mainContent" class="blurred" tabindex="-1">
+  <!-- HOME / HERO -->
+  <section class="hero" id="home" aria-labelledby="hero-title">
+    <h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
+    <p>Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
+    <a href="#services" class="btn">Наші послуги</a>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="services" aria-labelledby="services-title">
+    <h2 id="services-title">Наші послуги</h2>
+    <div class="grid">
+      <div class="card"><h3>Web-дизайн</h3><p>Адаптивні сайти, лендінги, портфоліо.</p></div>
+      <div class="card"><h3>Брендинг</h3><p>Логотипи, айдентика, стиль компанії.</p></div>
+      <div class="card"><h3>Дизайн візиток</h3><p>Робимо дизайн візиток на будь-який смак та з айдентики бренду.</p></div>
     </div>
-  </header>
+  </section>
 
-  <!-- ENTRY OVERLAY -->
-  <div id="entryOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Вступний екран">
-    <button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+  <!-- SOCIALS -->
+  <section id="socials" class="services" aria-labelledby="social-title">
+    <h2 id="social-title">Соціальні мережі</h2>
+    <div class="grid">
+      <a class="card" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank">
+        <h3>Instagram</h3>
+        <p>Наш офіційний профіль</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <p>&copy; 2025 Nej_Studio — Всі права та дизайн належать тільки Nej_Studio</p>
+    <p class="contact">
+      <a href="mailto:marcus395k@gmail.com" class="email-link">
+        <img src="gmail-icon.png" alt="Gmail" class="email-icon" aria-hidden="true">Написати мені
+      </a>
+    </p>
+  </footer>
+</main>
+
+<!-- MODAL SOON -->
+<div id="soonModal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <button id="closeSoon" class="close-btn" aria-label="Закрити модальне вікно">✖</button>
+    <h1>soon</h1>
+    <p>Невелика інформація про структуру сайту або нові функції:</p>
+    <div class="icon-grid">
+      <div class="icon-card">🏠 Home</div>
+      <div class="icon-card">💻 Web</div>
+      <div class="icon-card">🎨 Design</div>
+      <div class="icon-card">📱 Mobile</div>
+      <div class="icon-card">📝 Blog</div>
+      <div class="icon-card">📧 Contact</div>
+    </div>
   </div>
+</div>
 
-  <!-- MAIN CONTENT -->
-  <main id="mainContent" class="blurred" tabindex="-1">
-    <section class="hero" id="home" aria-labelledby="hero-title">
-      <h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
-      <p>Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
-      <a href="#services" class="btn">Наші послуги</a>
-    </section>
+<!-- TOAST -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <section id="services" class="services" aria-labelledby="services-title">
-      <h2 id="services-title">Наші послуги</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Web-дизайн</h3>
-          <p>Адаптивні сайти, лендінги, портфоліо.</p>
-        </div>
-        <div class="card">
-          <h3>Брендинг</h3>
-          <p>Логотипи, айдентика, стиль компанії.</p>
-        </div>
-        <div class="card">
-          <h3>Дизайн візиток</h3>
-          <p>Робимо дизайн візиток на будь-який смак та з айдентики бренду.</p>
-        </div>
-      </div>
-    </section>
-
-    <footer id="contact">
-      <p>&copy; 2025 Nej_Studio — Всі права та дизайн належать тільки Nej_Studio</p>
-      <p class="contact">
-        <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink">
-          <img src="gmail-icon.png" alt="Gmail" class="email-icon" aria-hidden="true">
-          Написати мені
-        </a>
-      </p>
-    </footer>
-  </main>
-
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
