@@ -11,10 +11,10 @@
 <header>
   <div class="brand" id="brand">Nej_Studio</div>
 
+  <!-- Навігація: тепер тільки соціальні мережі та контакт -->
   <nav aria-label="Головна навігація" class="main-nav">
-    <button class="nav-btn" data-panel="description">Опис</button>
-    <button class="nav-btn" data-panel="socials">Соцмережі</button>
-    <button class="nav-btn" data-panel="contact">Контакт</button>
+    <a class="nav-link" href="#socials">Соцмережі</a>
+    <a class="nav-link" href="#contact">Контакт</a>
   </nav>
 
   <div class="header-actions">
@@ -34,11 +34,13 @@
 
 <!-- MAIN CONTENT -->
 <main id="mainContent" class="site-main" tabindex="-1" aria-hidden="true">
+  <!-- HERO -->
   <section class="hero" id="home" aria-labelledby="hero-title">
     <h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
     <p class="lead">Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
   </section>
 
+  <!-- WHAT WE OFFER -->
   <section id="services" class="services" aria-labelledby="services-title">
     <h2 id="services-title">Що ми пропонуємо</h2>
     <div class="grid">
@@ -59,62 +61,73 @@
     </div>
   </section>
 
+  <!-- PRICING SECTION -->
+  <section id="pricing" class="pricing-section" aria-labelledby="pricing-title">
+    <h2 id="pricing-title" class="pricing-title">Ціни на розробку</h2>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Створення сайту</h3>
+        <p class="price">2500 – 5000 грн</p>
+        <p class="desc">Повна розробка сучасного, адаптивного сайту (2–5 сторінок). Динамічні елементи, базова SEO-підготовка.</p>
+        <button class="details-btn" onclick="openMore('pricing')">Детальніше</button>
+      </div>
+
+      <div class="price-card">
+        <h3>Викладення сайту в мережу</h3>
+        <p class="price">1000 грн</p>
+        <p class="desc">Розміщення на хостингу, підключення домену, налаштування HTTPS.</p>
+        <button class="details-btn" onclick="openMore('pricing')">Детальніше</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIALS -->
   <section id="socials" class="services" aria-labelledby="social-title">
     <h2 id="social-title">Соціальні мережі</h2>
     <div class="grid">
       <a class="card link-card" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank" rel="noopener noreferrer">
         <h3>Instagram</h3>
-        <p>Наш офіційний профіль — приклади робіт і процесу.</p>
+        <p>Наш офіційний профіль — приклади робіт і процесу. Натисніть, щоб перейти.</p>
       </a>
     </div>
   </section>
 
+  <!-- FOOTER / CONTACT -->
   <footer id="contact" class="services" aria-labelledby="contact-title">
     <h2 id="contact-title">Контакт</h2>
-    <p>Зв'язатися: 
-      <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink">
-        marcus395k@gmail.com
-      </a>
+    <p>Зв'язатися:
+      <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink" title="Написати на marcus395k@gmail.com">marcus395k@gmail.com</a>
     </p>
     <p class="small">© 2025 Nej_Studio — Всі права належать тільки Nej_Studio</p>
   </footer>
 </main>
 
-<!-- PANEL CONTAINER -->
+<!-- PANEL CONTAINER: зараз тільки прайс (відкривається через openMore) -->
 <div id="panelContainer" class="panel-container" aria-hidden="true">
-  <div class="panel panel--description" data-panel="description" role="region" aria-label="Опис">
+  <div class="panel panel--pricing" data-panel="pricing" role="region" aria-label="Прайс">
     <button class="panel-close" data-close>← Назад</button>
     <div class="panel-inner">
-      <h2>Опис студії</h2>
-      <p>Nej_Studio створює індивідуальні рішення: від простих лендінгів до повної айдентики.</p>
+      <h2>Деталі по цінах</h2>
       <div class="panel-grid">
-        <div class="panel-card"><strong>1000 грн</strong><div>1-сторінковий лендінг</div></div>
-        <div class="panel-card"><strong>2500–5000 грн</strong><div>Сайт 2–5 сторінок, динаміка</div></div>
-        <div class="panel-card"><strong>Брандинг</strong><div>Пакет айдентики, візитки, лого</div></div>
+        <div class="panel-card">
+          <strong>2500 – 5000 грн</strong>
+          <div>Повна розробка сайту (2–5 сторінок). Включає: дизайн, адаптивність, контактну форму, базову SEO-підготовку. Ціна залежить від складності.</div>
+        </div>
+        <div class="panel-card">
+          <strong>1000 грн</strong>
+          <div>Викладення сайту в інтернет: налаштування хостингу, домен, SSL.</div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="panel panel--socials" data-panel="socials" role="region" aria-label="Соцмережі">
-    <button class="panel-close" data-close>← Назад</button>
-    <div class="panel-inner">
-      <h2>Соцмережі</h2>
-      <p>Підтримка і контент-план для Instagram.</p>
-      <a class="btn-link" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank" rel="noopener noreferrer">Перейти в Instagram</a>
-    </div>
-  </div>
-
-  <div class="panel panel--contact" data-panel="contact" role="region" aria-label="Контакт">
-    <button class="panel-close" data-close>← Назад</button>
-    <div class="panel-inner">
-      <h2>Контакти</h2>
-      <p>Напишіть нам на пошту або замовте консультацію.</p>
-      <a class="btn-link" href="mailto:marcus395k@gmail.com">Написати на електронну пошту</a>
+      <div style="margin-top:20px;">
+        <a class="email-link" href="mailto:marcus395k@gmail.com">Замовити / Запитати — marcus395k@gmail.com</a>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- MODAL SOON -->
+<!-- SOON modal -->
 <div id="soonModal" class="modal" aria-hidden="true">
   <div class="modal-content" role="dialog" aria-modal="true" aria-label="Soon">
     <button id="closeSoon" class="close-btn" aria-label="Закрити модальне вікно">✖</button>
@@ -123,6 +136,7 @@
   </div>
 </div>
 
+<!-- TOAST -->
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="script.js"></script>

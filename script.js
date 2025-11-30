@@ -1,37 +1,43 @@
-// script.js — Nej_Studio (панелі, overlay, музика, Soon modal, toast, history)
+// script.js — оновлений: smooth anchors, overlay, music, pricing panel, soon modal, toast
 
-/* helpers */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 
+/* Toast helper */
 function showToast(text, ms = 3000){
-  const t = $('#toast');
-  t.textContent = text;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(()=> t.classList.remove('show'), ms);
+  let toast = $('#toast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = text;
+  toast.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=> toast.classList.remove('show'), ms);
 }
 
-/* ENTRY OVERLAY (go web) */
+/* ENTRY OVERLAY */
 const entryOverlay = $('#entryOverlay');
 const goBtn = $('#goBtn');
 const mainContent = $('#mainContent');
-if(goBtn){
+
+if(goBtn && entryOverlay && mainContent){
   goBtn.addEventListener('click', async () => {
     entryOverlay.classList.add('hidden');
     setTimeout(()=> entryOverlay.style.display='none', 420);
     mainContent.setAttribute('aria-hidden','false');
     mainContent.classList.remove('blurred');
 
-    // try autoplay music
-    if(window.__NejMusic) {
+    if(window.__NejMusic){
       try { await window.__NejMusic.play(); showToast('Музика увімкнена'); }
       catch(e){ showToast('Автовідтворення може бути заблоковане'); }
     }
   });
 }
 
-/* BACKGROUND MUSIC */
+/* MUSIC */
 (function initMusic(){
   const audio = new Audio('music.mp3');
   audio.loop = true;
@@ -53,82 +59,81 @@ if(goBtn){
   }
 })();
 
-/* PANEL SYSTEM (header nav => full-screen panel switching)
-   - uses panelContainer and panels with data-panel attributes
-   - supports browser history (pushState) so user can press Back
-*/
-const panelContainer = document.getElementById('panelContainer');
+/* SMOOTH ANCHOR SCROLL (для nav links та будь-яких #) */
+$$('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    const href = a.getAttribute('href');
+    if(!href || href.length <= 1) return;
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if(target){
+      // close panels if open
+      const panelContainer = $('#panelContainer');
+      if(panelContainer && panelContainer.getAttribute('aria-hidden') === 'false'){
+        panelContainer.setAttribute('aria-hidden','true');
+        $$('.panel').forEach(p=> p.style.display='none');
+        mainContent.setAttribute('aria-hidden','false');
+      }
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+});
+
+/* PRICING PANEL (openMore function) */
+const panelContainer = $('#panelContainer');
 const panels = $$('.panel');
-const navButtons = $$('.nav-btn');
 const panelCloseButtons = $$('.panel-close');
 
 function openPanel(name, push = true){
+  if(!panelContainer) return;
   const panel = panels.find(p => p.dataset.panel === name);
-  if(!panel || !panelContainer) return;
-  // show container
+  if(!panel) return;
   panelContainer.setAttribute('aria-hidden','false');
-  // hide other panels
   panels.forEach(p => p.style.display = (p === panel ? 'block' : 'none'));
-  // accessibility
-  panelContainer._previouslyFocused = document.activeElement;
-  panel.setAttribute('tabindex','-1');
-  panel.focus();
-  // hide main content visually but keep background
   mainContent.setAttribute('aria-hidden','true');
-  // push history
   if(push) history.pushState({panel:name}, '', `#${name}`);
 }
 
 function closePanels(push = true){
   if(!panelContainer) return;
   panelContainer.setAttribute('aria-hidden','true');
-  // restore main content
+  panels.forEach(p => p.style.display='none');
   mainContent.setAttribute('aria-hidden','false');
-  if(panelContainer._previouslyFocused) panelContainer._previouslyFocused.focus();
   if(push) history.pushState({}, '', window.location.pathname);
 }
 
-/* wire nav buttons */
-navButtons.forEach(b=>{
-  b.addEventListener('click', (e)=>{
-    const name = b.dataset.panel;
-    openPanel(name, true);
-  });
-});
-
-/* panel close */
-panelCloseButtons.forEach(btn=>{
-  btn.addEventListener('click', ()=> closePanels(true));
-});
-
-/* close by clicking outside panel */
-if(panelContainer){
-  panelContainer.addEventListener('click', (e)=>{
-    if(e.target === panelContainer) closePanels(true);
-  });
+function openMore(panelName='pricing'){
+  openPanel(panelName, true);
 }
 
-/* handle back/forward */
+panelCloseButtons.forEach(btn => btn.addEventListener('click', ()=> closePanels(true)));
+if(panelContainer){
+  panelContainer.addEventListener('click', (e)=> { if(e.target === panelContainer) closePanels(true); });
+}
+
+/* history handling for panel */
 window.addEventListener('popstate', (e)=>{
   if(e.state && e.state.panel){
-    // open panel from state
     openPanel(e.state.panel, false);
   } else {
-    // no panel in state -> close
     closePanels(false);
   }
 });
 
-/* on load: if URL has hash open panel */
+/* On load: if hash equals panel name, open it; otherwise scroll to section if hash */
 document.addEventListener('DOMContentLoaded', ()=>{
   const hash = location.hash.replace('#','');
   if(hash){
-    // small timeout to allow layout
-    setTimeout(()=> openPanel(hash, false), 120);
+    const panelExists = panels.find(p => p.dataset.panel === hash);
+    if(panelExists) setTimeout(()=> openPanel(hash,false), 120);
+    else {
+      const target = document.getElementById(hash);
+      if(target) setTimeout(()=> target.scrollIntoView({behavior:'smooth', block:'start'}), 120);
+    }
   }
 });
 
-/* SOON modal (focus trap, ESC, backdrop) */
+/* SOON modal (focus-trap, ESC) */
 const soonBtn = $('#soonBtn');
 const soonModal = $('#soonModal');
 const closeSoon = $('#closeSoon');
@@ -136,20 +141,14 @@ const closeSoon = $('#closeSoon');
 function openModal(modal){
   if(!modal) return;
   modal.setAttribute('aria-hidden','false');
-  modal.style.display = 'flex';
+  modal.style.display='flex';
   modal._previouslyFocused = document.activeElement;
   const focusable = modal.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
   modal._focusable = Array.from(focusable);
   if(modal._focusable.length) modal._focusable[0].focus();
-  modal._handleKey = (e)=>{
-    if(e.key !== 'Tab') return;
-    const f = modal._focusable; const idx = f.indexOf(document.activeElement);
-    if(e.shiftKey){
-      if(idx === 0){ e.preventDefault(); f[f.length-1].focus(); }
-    } else {
-      if(idx === f.length-1){ e.preventDefault(); f[0].focus(); }
-    }
-  };
+  modal._handleKey = (e)=>{ if(e.key !== 'Tab') return; const f = modal._focusable; const idx = f.indexOf(document.activeElement);
+    if(e.shiftKey){ if(idx === 0){ e.preventDefault(); f[f.length - 1].focus(); } }
+    else { if(idx === f.length - 1){ e.preventDefault(); f[0].focus(); } } };
   document.addEventListener('keydown', modal._handleKey);
   showToast('Відкрито');
 }
@@ -157,9 +156,9 @@ function openModal(modal){
 function closeModal(modal){
   if(!modal) return;
   modal.setAttribute('aria-hidden','true');
-  modal.style.display = 'none';
+  modal.style.display='none';
   try{ if(modal._previouslyFocused) modal._previouslyFocused.focus(); }catch(e){}
-  if(modal._handleKey) { document.removeEventListener('keydown', modal._handleKey); modal._handleKey = null; }
+  if(modal._handleKey){ document.removeEventListener('keydown', modal._handleKey); modal._handleKey = null; }
   showToast('Закрито');
 }
 
@@ -167,22 +166,10 @@ if(soonBtn && soonModal){
   soonBtn.addEventListener('click', ()=> openModal(soonModal));
   if(closeSoon) closeSoon.addEventListener('click', ()=> closeModal(soonModal));
   soonModal.addEventListener('click', (e)=> { if(e.target === soonModal) closeModal(soonModal); });
-  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape' && soonModal.getAttribute('aria-hidden') === 'false') closeModal(soonModal); });
+  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape' && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal); });
 }
 
-/* smooth anchor behaviour for internal links in main content */
-$$('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click', (e)=>{
-    const href = a.getAttribute('href');
-    if(href.length > 1){
-      e.preventDefault();
-      const target = document.querySelector(href);
-      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-  });
-});
-
-/* ensure a #toast exists */
-if(!$('#toast')) {
+/* ensure toast exists */
+if(!$('#toast')){
   const t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t);
 }
