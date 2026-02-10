@@ -46,7 +46,7 @@
 
   main{padding-top:92px}
   .site-main[aria-hidden="true"]{filter:blur(4px);pointer-events:none}
-  .hero{min-height:56vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 6% 40px}
+  .hero{min-height:calc(var(--vh, 1vh) * 60);display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 6% 40px}
   .hero h1{font-size:40px;max-width:980px;text-shadow:0 8px 30px rgba(0,0,0,0.6);margin-bottom:10px}
   .lead{color:var(--muted);max-width:760px;margin:0 auto 18px}
 
@@ -92,13 +92,22 @@
 
   @media (max-width:920px){.overlay-title{font-size:40px}.hero h1{font-size:36px}.go-btn{padding:14px 32px}header{padding:0 4%}.panel{padding:28px}}
   @media (max-width:720px){.overlay-title{font-size:32px}.hero h1{font-size:28px}.panel{padding:18px}.main-nav{gap:8px}.nav-link{padding:6px 8px;font-size:14px}.email-link{padding:10px 12px;font-size:15px}}
-  </style></head>
+  
+
+  /* 3D кнопки і поведінка для тач/мобільних */
+  .btn-3d{transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s; transform:translateZ(0); will-change:transform; box-shadow:0 12px 30px rgba(8,8,20,0.45);}
+  .btn-3d:hover{transform:translateY(-6px) scale(1.01); box-shadow:0 28px 60px rgba(8,8,20,0.6);}
+  .btn-3d:active, .btn-3d.pressed{transform:translateY(2px) scale(0.995); box-shadow:0 8px 18px rgba(8,8,20,0.35);}
+  .email-link.btn-3d{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 48px rgba(106,0,255,0.18)}
+
+</style></head>
 <body><header>
   <div class="brand" id="brand">Nej_Studio</div>
   <nav aria-label="Головна навігація" class="main-nav">
     <a class="nav-link" href="#home">Головна</a>
     <a class="nav-link" href="#services">Послуги</a>
     <a class="nav-link" href="#pricing">Ціни</a>
+    <a class="nav-link" href="#extra">Додатково</a>
     <a class="nav-link" href="#socials">Соцмережі</a>
     <a class="nav-link" href="#contact">Контакт</a>
   </nav>  <div class="header-actions">
@@ -137,24 +146,24 @@
   <div class="price-card">
     <h3>Створення сайту</h3>
     <p class="price">500 – 1000 грн / екран</p>
-    <p class="desc"><strong>Прайс</strong>: базова одиниця — екран (екран = одна секція або сторінка типу "Головна", "Послуги", "Контакти"). Мінімальна робота — 1 екран.</p>
+    <p class="desc"><strong>Прайс</strong>: базова одиниця — екран (екран = одна секція або сторінка типу \"Головна\", \"Послуги\", \"Контакти\"). Мінімальна робота — 1 екран.</p>
     <p class="desc">Приклад пакетів:
       <ul>
         <li>1 екран — 500–1000 грн</li>
         <li>3–4 екрани — ~1500–3600 грн</li>
-        <li>5–7 екранів — 3000–4500 грн (пакет)
-        </li>
+        <li>5–7 екранів — 3000–4500 грн (пакет)</li>
       </ul>
     </p>
     <p class="desc">У вартість включено: адаптивний дизайн, верстка, контактна форма, базова SEO-підготовка. Уточнюється під проєкт.</p>
-    <button class="details-btn" onclick="openMore('pricing')">Детальніше</button>
+    <button class="details-btn btn-3d" onclick="openMore('pricing')">Детальніше</button>
   </div>
 
   <div class="price-card">
-    <h3>Додаткові послуги</h3>
-    <p class="price">За домовленістю</p>
-    <p class="desc">Хостинг, домен, наповнення контентом, інтеграції (CRM, оплати), підтримка та супровід — оплачується окремо або за пакетом.</p>
-    <button class="details-btn" onclick="openMore('pricing')">Детальніше</button>
+    <h3>Додатково</h3>
+    <p class="price">Реєстрація на GitHub / Альтернативні варіанти</p>
+    <p class="desc">Ми можемо зареєструвати ваш сайт і розмістити його на GitHub Pages (безкоштовно). Якщо вам не підходить безкоштовний хостинг — ми можемо надати ZIP-пакет із сайтом, або допомогти з придбанням і налаштуванням платного хостингу (за домовленістю).</p>
+    <p class="desc">При необхідності: наповнення контентом, інтеграції та підтримка — за окремою домовленістю.</p>
+    <button class="details-btn btn-3d" onclick="openMore('pricing')">Детальніше</button>
   </div>
 </div>
 
@@ -189,7 +198,8 @@
         </div>
         <div class="panel-card">
           <strong>Додаткові роботи</strong>
-          <div>Наповнення контентом, інтеграції, хостинг/домени — за окремим прайсом або підпискою.</div>
+          <div>Наповнення контентом, інтеграції — за окремим прайсом або підпискою. Ми також реєструємо сайти на GitHub Pages та налаштовуємо репозиторій під деплой. Якщо безкоштовний хостинг вам не підходить — ми можемо скинути вам повну папку сайту або допомогти з придбанням платного хостингу і його налаштуванням.</div>
+        </div>
         </div>
       </div><div style="margin-top:20px; text-align:center;">
     <a class="email-link" href="mailto:marcus395k@gmail.com">Замовити / Запитати — marcus395k@gmail.com</a>
@@ -262,5 +272,21 @@ function closeModal(modal){ if(!modal) return; modal.setAttribute('aria-hidden',
 if(soonBtn && soonModal){ soonBtn.addEventListener('click', ()=> openModal(soonModal)); if(closeSoon) closeSoon.addEventListener('click', ()=> closeModal(soonModal)); soonModal.addEventListener('click', (e)=> { if(e.target === soonModal) closeModal(soonModal); }); document.addEventListener('keydown', (e)=> { if(e.key === 'Escape' && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal); }); }
 
 if(!$('#toast')){ const t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
+
+// Підлаштування під висоту вьюпорту (fix для мобільних, де 100vh некоректний)
+function setVh(){ document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); }
+setVh(); window.addEventListener('resize', setVh);
+
+// touch-friendly 3d effect: додаємо клас .pressed на touchstart, прибираємо на touchend/cancel
+function initTouch3D(){
+  const els = Array.from(document.querySelectorAll('button, .details-btn, .go-btn, .email-link'));
+  els.forEach(el=>{
+    el.addEventListener('touchstart', ()=> el.classList.add('pressed'), {passive:true});
+    el.addEventListener('touchend', ()=> el.classList.remove('pressed'));
+    el.addEventListener('touchcancel', ()=> el.classList.remove('pressed'));
+  });
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initTouch3D); else initTouch3D();
+
 </script></body>
 </html>
