@@ -39,7 +39,8 @@
   .header-actions{display:flex;gap:10px;align-items:center}
   .header-btn, .music-btn{padding:8px 12px;border-radius:10px;border:0;font-weight:800;cursor:pointer;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;box-shadow:0 10px 30px rgba(106,0,255,0.12)}
 
-  #entryOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:120;padding:22px;text-align:center;background:linear-gradient(180deg, rgba(3,6,12,0.65), rgba(3,6,12,0.9))}
+  #entryOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:120;padding:22px;text-align:center;background:linear-gradient(180deg, rgba(3,6,12,0.65), rgba(3,6,12,0.9));transition:opacity .32s ease;}
+  #entryOverlay.hidden{opacity:0;pointer-events:none;}
   .overlay-inner{max-width:920px}
   .overlay-title{font-size:48px;margin-bottom:8px}
   .overlay-sub{color:var(--muted);margin-bottom:18px}
@@ -53,7 +54,7 @@
 
   .services{padding:48px 6%}
   .services h2{font-size:28px;margin-bottom:18px}
-  .grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
   .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:var(--shadow)}
   .card h3{color:var(--accent);margin-bottom:8px}
   .card p{color:var(--muted)}
@@ -81,8 +82,7 @@
   .panel-container[aria-hidden="false"]{display:flex}
   .panel{width:100%;height:100%;max-width:980px;background:var(--panel-bg);border-radius:16px;padding:40px;box-shadow:0 36px 90px rgba(8,8,20,0.7);display:flex;flex-direction:column;position:relative;overflow-y:auto;transform:translateY(12px) scale(.995);opacity:0;transition:transform .36s cubic-bezier(.2,.9,.2,1), opacity .28s;}
   .panel.active{transform:none;opacity:1}
-  @media (max-width:720px){
-    .panel{width:calc(100% - 24px);height:auto;max-width:none;border-radius:12px;padding:20px;margin:12px;max-height:calc(var(--vh,1vh) * 90);}
+  @media (max-width:720px){.overlay-title{font-size:32px}.hero h1{font-size:28px}.panel{padding:18px}.main-nav{gap:8px}.nav-link{padding:6px 8px;font-size:14px}.email-link{padding:10px 12px;font-size:15px} header{padding:0 3%} .hero{padding:80px 3% 30px} .services{padding:28px 3%} .pricing-section{padding:28px 3%} }
   }
   
   .panel-close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,0.08);color:#fff;border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
@@ -236,13 +236,29 @@ const goBtn = $('#goBtn');
 const mainContent = $('#mainContent');
 
 if(goBtn && entryOverlay && mainContent){
-  goBtn.addEventListener('click', async () => {
+  const enterSite = async ()=>{
+    // плавне приховування оверлея
     entryOverlay.classList.add('hidden');
-    setTimeout(()=> entryOverlay.style.display='none', 420);
+    entryOverlay.setAttribute('aria-hidden','true');
+    entryOverlay.style.pointerEvents = 'none';
+    // даємо час на анімацію
+    setTimeout(()=>{
+      if(entryOverlay && entryOverlay.parentNode) entryOverlay.style.display='none';
+    }, 360);
+
     mainContent.setAttribute('aria-hidden','false');
     mainContent.classList.remove('blurred');
-    if(window.__NejMusic){ try { await window.__NejMusic.play(); showToast('Музика увімкнена'); } catch(e){ showToast('Автовідтворення може бути заблоковане'); } }
-  });
+    try{ mainContent.focus({preventScroll:true}); }catch(e){}
+
+    if(window.__NejMusic){
+      try { await window.__NejMusic.play(); showToast('Музика увімкнена'); }
+      catch(e){ showToast('Автовідтворення може бути заблоковане'); }
+    }
+  };
+
+  goBtn.addEventListener('click', enterSite);
+  goBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') enterSite(); });
+  entryOverlay.addEventListener('click', (e)=>{ if(e.target === entryOverlay) enterSite(); });
 }
 
 (function initMusic(){
