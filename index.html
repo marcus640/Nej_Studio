@@ -108,6 +108,21 @@
   .btn-3d:active, .btn-3d.pressed{transform:translateY(2px) scale(0.995); box-shadow:0 8px 18px rgba(8,8,20,0.35);}
   .email-link.btn-3d{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 48px rgba(106,0,255,0.18)}
 
+
+  /* --- додаткові responsive правила --- */
+  /* Fluid typography */
+  html{font-size:clamp(15px, calc(12px + 0.6vw), 18px);} 
+  .overlay-inner{width:min(920px,94%);} 
+  .hero h1{font-size:clamp(24px, 4.2vw, 48px); max-width:900px;}
+  .details-btn, .header-btn, .music-btn, .go-btn{touch-action:manipulation;}
+  /* збільшуємо ціль для торкання на пристроях без hover */
+  @media (hover: none){
+    .header-btn, .music-btn, .details-btn, .go-btn{padding:14px 18px}
+    .card p, .desc{font-size:0.95rem}
+    button{min-height:48px}
+  }
+  button{min-height:44px;min-width:44px}
+
 </style></head>
 <body><header>
   <div class="brand" id="brand">Nej_Studio</div>
@@ -279,7 +294,7 @@ const panelContainer = $('#panelContainer');
 const panels = $$('.panel');
 const panelCloseButtons = $$('.panel-close');
 
-function openPanel(name, push = true){ if(!panelContainer) return; const panel = panels.find(p => p.dataset.panel === name); if(!panel) return; panelContainer.setAttribute('aria-hidden','false'); panelContainer.classList.add('open'); panels.forEach(p => p.classList.toggle('active', p === panel)); mainContent.setAttribute('aria-hidden','true'); if(push) history.pushState({panel:name}, '', `#${name}`); }
+function openPanel(name, push = true){ if(!panelContainer) return; const panel = panels.find(p => p.dataset.panel === name); if(!panel) return; panelContainer.setAttribute('aria-hidden','false'); panelContainer.classList.add('open'); panels.forEach(p => p.classList.toggle('active', p === panel)); mainContent.setAttribute('aria-hidden','true'); try{ const focusable = panel.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])'); if(focusable.length) focusable[0].focus(); }catch(e){} if(push) history.pushState({panel:name}, '', `#${name}`); }
 
 function closePanels(push = true){ if(!panelContainer) return; panelContainer.setAttribute('aria-hidden','true'); panelContainer.classList.remove('open'); panels.forEach(p => p.classList.remove('active')); mainContent.setAttribute('aria-hidden','false'); if(push) history.pushState({}, '', window.location.pathname); }push = true){ if(!panelContainer) return; panelContainer.setAttribute('aria-hidden','true'); panels.forEach(p => p.style.display='none'); mainContent.setAttribute('aria-hidden','false'); if(push) history.pushState({}, '', window.location.pathname); }
 function openMore(panelName='pricing'){ openPanel(panelName, true); }
@@ -299,7 +314,14 @@ if(!$('#toast')){ const t = document.createElement('div'); t.id='toast'; t.class
 
 // Підлаштування під висоту вьюпорту (fix для мобільних, де 100vh некоректний)
 function setVh(){ document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); }
-setVh(); window.addEventListener('resize', setVh);
+setVh();
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', ()=>{ setTimeout(setVh, 140); });
+
+// Закрити панелі / модалки через ESC
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ if(panelContainer && panelContainer.classList.contains('open')) closePanels(true); if(soonModal && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal); } });
+
+
 
 // touch-friendly 3d effect: додаємо клас .pressed на touchstart, прибираємо на touchend/cancel
 function initTouch3D(){
