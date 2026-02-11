@@ -19,14 +19,15 @@
     --radius:14px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
+  html,body{
     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
     color:var(--text);
     background:
       radial-gradient(circle at 18% 20%, var(--violet) 0%, var(--dark) 55%),
       radial-gradient(circle at 82% 70%, #4a0080 0%, transparent 60%),
       var(--dark);
+    background-repeat:no-repeat;
+    background-size:cover;
     -webkit-font-smoothing:antialiased;
     line-height:1.45;overflow-x:hidden;
   }
@@ -74,9 +75,16 @@
   .small{opacity:0.7;font-size:13px;margin-top:8px}
   .email-link{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 48px rgba(106,0,255,0.18)}
 
-  .panel-container{position:fixed;inset:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;z-index:140;padding:0;background:rgba(0,0,0,0.6)}
+  .panel-container{position:fixed;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:140;padding:0;background:rgba(0,0,0,0.6);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .36s ease, visibility .36s;}
+  .panel-container.open{opacity:1;visibility:visible;pointer-events:auto}
+  
   .panel-container[aria-hidden="false"]{display:flex}
-  .panel{width:100%;height:100%;max-width:none;background:var(--panel-bg);border-radius:0;padding:40px;box-shadow:none;display:flex;flex-direction:column;position:relative;overflow-y:auto}
+  .panel{width:100%;height:100%;max-width:980px;background:var(--panel-bg);border-radius:16px;padding:40px;box-shadow:0 36px 90px rgba(8,8,20,0.7);display:flex;flex-direction:column;position:relative;overflow-y:auto;transform:translateY(12px) scale(.995);opacity:0;transition:transform .36s cubic-bezier(.2,.9,.2,1), opacity .28s;}
+  .panel.active{transform:none;opacity:1}
+  @media (max-width:720px){
+    .panel{width:calc(100% - 24px);height:auto;max-width:none;border-radius:12px;padding:20px;margin:12px;max-height:calc(var(--vh,1vh) * 90);}
+  }
+  
   .panel-close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,0.08);color:#fff;border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
   .panel-inner{margin-top:10px;color:var(--text)}
   .panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
@@ -255,8 +263,9 @@ const panelContainer = $('#panelContainer');
 const panels = $$('.panel');
 const panelCloseButtons = $$('.panel-close');
 
-function openPanel(name, push = true){ if(!panelContainer) return; const panel = panels.find(p => p.dataset.panel === name); if(!panel) return; panelContainer.setAttribute('aria-hidden','false'); panels.forEach(p => p.style.display = (p === panel ? 'block' : 'none')); mainContent.setAttribute('aria-hidden','true'); if(push) history.pushState({panel:name}, '', `#${name}`); }
-function closePanels(push = true){ if(!panelContainer) return; panelContainer.setAttribute('aria-hidden','true'); panels.forEach(p => p.style.display='none'); mainContent.setAttribute('aria-hidden','false'); if(push) history.pushState({}, '', window.location.pathname); }
+function openPanel(name, push = true){ if(!panelContainer) return; const panel = panels.find(p => p.dataset.panel === name); if(!panel) return; panelContainer.setAttribute('aria-hidden','false'); panelContainer.classList.add('open'); panels.forEach(p => p.classList.toggle('active', p === panel)); mainContent.setAttribute('aria-hidden','true'); if(push) history.pushState({panel:name}, '', `#${name}`); }
+
+function closePanels(push = true){ if(!panelContainer) return; panelContainer.setAttribute('aria-hidden','true'); panelContainer.classList.remove('open'); panels.forEach(p => p.classList.remove('active')); mainContent.setAttribute('aria-hidden','false'); if(push) history.pushState({}, '', window.location.pathname); }push = true){ if(!panelContainer) return; panelContainer.setAttribute('aria-hidden','true'); panels.forEach(p => p.style.display='none'); mainContent.setAttribute('aria-hidden','false'); if(push) history.pushState({}, '', window.location.pathname); }
 function openMore(panelName='pricing'){ openPanel(panelName, true); }
 panelCloseButtons.forEach(btn => btn.addEventListener('click', ()=> closePanels(true)));
 if(panelContainer){ panelContainer.addEventListener('click', (e)=> { if(e.target === panelContainer) closePanels(true); }); }
