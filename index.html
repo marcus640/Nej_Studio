@@ -1,701 +1,367 @@
 <!doctype html>
 
-<html lang="uk"><head>  <meta charset="utf-8" />  <meta name="viewport" content="width=device-width,initial-scale=1" />  <title>Nej_Studio</title>  <link rel="stylesheet" href="style.css"></head><body><header>  <div class="brand" id="brand">Nej_Studio</div>  <!-- Навігація: тепер тільки соціальні мережі та контакт -->  <nav aria-label="Головна навігація" class="main-nav"><a class="nav-link" href="#socials">Соцмережі</a>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0e15">
+  <title>Nej_Studio</title>  <!-- One-file version: стилі вбудовано для швидкого апдейту. Якщо хочете — зроблю окремі style.css / script.js -->  <style>
+  /* style.css — оновлений, сучасний, responsive */
+  :root{
+    --violet:#6a00ff;
+    --violet-2:#8b3cff;
+    --dark:#0b0e15;
+    --accent:#4cc9f0;
+    --text:#eef6ff;
+    --muted:rgba(238,246,255,0.78);
+    --panel-bg:linear-gradient(135deg,var(--violet),var(--dark));
+    --shadow:0 18px 48px rgba(8,8,20,0.6);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    color:var(--text);
+    background:
+      radial-gradient(circle at 18% 20%, var(--violet) 0%, var(--dark) 55%),
+      radial-gradient(circle at 82% 70%, #4a0080 0%, transparent 60%),
+      var(--dark);
+    background-repeat:no-repeat;
+    background-size:cover;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.45;overflow-x:hidden;
+  }
+  header{position:fixed;inset:0 0 auto 0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(8px);z-index:70}
+  .brand{font-weight:800;font-size:18px}
+  .main-nav{display:flex;gap:12px;align-items:center}
+  .nav-link{color:var(--muted);font-weight:700;padding:8px 10px;border-radius:8px;transition:all .16s;text-decoration:none}
+  .nav-link:hover{color:var(--accent);transform:translateY(-3px)}
+  .header-actions{display:flex;gap:10px;align-items:center}
+  .header-btn, .music-btn{padding:8px 12px;border-radius:10px;border:0;font-weight:800;cursor:pointer;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;box-shadow:0 10px 30px rgba(106,0,255,0.12)}
 
-<a class="nav-link" href="#contact">Контакт</a>
+  #entryOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:120;padding:22px;text-align:center;background:linear-gradient(180deg, rgba(3,6,12,0.65), rgba(3,6,12,0.9));transition:opacity .32s ease;}
+  #entryOverlay.hidden{opacity:0;pointer-events:none;}
+  .overlay-inner{max-width:920px}
+  .overlay-title{font-size:48px;margin-bottom:8px}
+  .overlay-sub{color:var(--muted);margin-bottom:18px}
+  .go-btn{padding:16px 40px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;box-shadow:0 22px 60px rgba(106,0,255,0.22);cursor:pointer}
 
-  </nav>  <div class="header-actions"><button id="soonBtn" class="header-btn" aria-haspopup="dialog">Soon</button>
+  main{padding-top:92px}
+  .site-main[aria-hidden="true"]{filter:blur(4px);pointer-events:none}
+  .hero{min-height:calc(var(--vh, 1vh) * 60);display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 6% 40px}
+  .hero h1{font-size:40px;max-width:980px;text-shadow:0 8px 30px rgba(0,0,0,0.6);margin-bottom:10px}
+  .lead{color:var(--muted);max-width:760px;margin:0 auto 18px}
 
-<button id="musicControl" class="music-btn" aria-pressed="false" title="Управління музикою">▶</button>
+  .services{padding:48px 6%}
+  .services h2{font-size:28px;margin-bottom:18px}
+  .grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:var(--shadow)}
+  .card h3{color:var(--accent);margin-bottom:8px}
+  .card p{color:var(--muted)}
 
-  </div></header><!-- ENTRY OVERLAY --><div id="entryOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Вступний екран">  <div class="overlay-inner"><h1 class="overlay-title">Nej_Studio</h1>
+  .pricing-section{padding:48px 6%;text-align:center}
+  .pricing-title{font-size:32px;font-weight:800;margin-bottom:18px}
+  .pricing-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .price-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:22px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:var(--shadow)}
+  .price-card h3{color:var(--accent);margin-bottom:8px}
+  .price{font-size:20px;font-weight:800;color:var(--accent);margin:12px 0}
+  .desc{color:var(--muted);margin-bottom:14px;text-align:left}
+  .details-btn{padding:10px 18px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;cursor:pointer}
 
-<p class="overlay-sub">Креативна студія — сайти, брендинг, візитки</p>
+  .link-card{display:block;color:inherit;text-decoration:none}
+  .link-card p{opacity:0.9}
 
-<button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+  footer{padding:36px 6%;text-align:center;border-top:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
+  footer p{opacity:0.9}
+  .small{opacity:0.7;font-size:13px;margin-top:8px}
+  .email-link{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 48px rgba(106,0,255,0.18)}
 
-  </div></div><!-- MAIN CONTENT --><main id="mainContent" class="site-main" tabindex="-1" aria-hidden="true">  <!-- HERO -->  <section class="hero" id="home" aria-labelledby="hero-title"><h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
+  .panel-container{position:fixed;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:140;padding:0;background:rgba(0,0,0,0.6);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .36s ease, visibility .36s;}
+  .panel-container.open{opacity:1;visibility:visible;pointer-events:auto}
+  
+  .panel-container[aria-hidden="false"]{display:flex}
+  .panel{width:100%;height:100%;max-width:980px;background:var(--panel-bg);border-radius:16px;padding:40px;box-shadow:0 36px 90px rgba(8,8,20,0.7);display:flex;flex-direction:column;position:relative;overflow-y:auto;transform:translateY(12px) scale(.995);opacity:0;transition:transform .36s cubic-bezier(.2,.9,.2,1), opacity .28s;}
+  .panel.active{transform:none;opacity:1}
+  @media (max-width:720px){.overlay-title{font-size:32px}.hero h1{font-size:28px}.panel{padding:18px}.main-nav{gap:8px}.nav-link{padding:6px 8px;font-size:14px}.email-link{padding:10px 12px;font-size:15px} header{padding:0 3%} .hero{padding:80px 3% 30px} .services{padding:28px 3%} .pricing-section{padding:28px 3%} }
+  }
+  
+  .panel-close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,0.08);color:#fff;border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+  .panel-inner{margin-top:10px;color:var(--text)}
+  .panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
+  .panel-card{background:rgba(255,255,255,0.04);padding:14px;border-radius:12px;text-align:center}
 
-<p class="lead">Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:160;padding:22px}
+  .modal[aria-hidden="false"]{display:flex}
+  .modal-content{width:100%;max-width:720px;background:var(--panel-bg);border-radius:16px;padding:24px;box-shadow:0 36px 90px rgba(8,8,20,0.7);text-align:center}
+  .close-btn{position:absolute;right:18px;top:18px;background:transparent;border:0;color:var(--text);font-size:20px;cursor:pointer}
 
-  </section>  <!-- WHAT WE OFFER -->  <section id="services" class="services" aria-labelledby="services-title"><h2 id="services-title">Що ми пропонуємо</h2>
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:rgba(0,0,0,0.6);color:#fff;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;z-index:300;transition:opacity .22s}
+  .toast.show{opacity:1;pointer-events:auto}
 
-<div class="grid">
+  @media (max-width:920px){.overlay-title{font-size:40px}.hero h1{font-size:36px}.go-btn{padding:14px 32px}header{padding:0 4%}.panel{padding:28px}}
+  @media (max-width:720px){.overlay-title{font-size:32px}.hero h1{font-size:28px}.panel{padding:18px}.main-nav{gap:8px}.nav-link{padding:6px 8px;font-size:14px}.email-link{padding:10px 12px;font-size:15px}}
+  
 
-  <article class="card">
-
-    <h3>Web-дизайн</h3>
-
-    <p>Адаптивні сайти, лендінги, портфоліо — чистий код і приємний UX.</p>
-
-  </article>
+  /* 3D кнопки і поведінка для тач/мобільних */
+  .btn-3d{transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s; transform:translateZ(0); will-change:transform; box-shadow:0 12px 30px rgba(8,8,20,0.45);}
+  .btn-3d:hover{transform:translateY(-6px) scale(1.01); box-shadow:0 28px 60px rgba(8,8,20,0.6);}
+  .btn-3d:active, .btn-3d.pressed{transform:translateY(2px) scale(0.995); box-shadow:0 8px 18px rgba(8,8,20,0.35);}
+  .email-link.btn-3d{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 48px rgba(106,0,255,0.18)}
 
 
+  /* --- додаткові responsive правила --- */
+  /* Fluid typography */
+  html{font-size:clamp(15px, calc(12px + 0.6vw), 18px);} 
+  .overlay-inner{width:min(920px,94%);} 
+  .hero h1{font-size:clamp(24px, 4.2vw, 48px); max-width:900px;}
+  .details-btn, .header-btn, .music-btn, .go-btn{touch-action:manipulation;}
+  /* збільшуємо ціль для торкання на пристроях без hover */
+  @media (hover: none){
+    .header-btn, .music-btn, .details-btn, .go-btn{padding:14px 18px}
+    .card p, .desc{font-size:0.95rem}
+    button{min-height:48px}
+  }
+  button{min-height:44px;min-width:44px}
 
-  <article class="card">
 
+  /* Mobile cosmic background (mobile only) */
+  @media (max-width:720px){
+    body{background:#030306;}
+    #mobileBg{position:fixed;inset:0;pointer-events:none;z-index:8;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:0;transform:scale(0.9);mix-blend-mode:screen}
+    .orb.orb-1{width:220px;height:220px;left:6%;top:18%;background:radial-gradient(circle at 30% 30%, rgba(106,0,255,0.22), rgba(140,60,255,0.06) 40%, transparent 60%);animation:orbFade 7s ease-in-out infinite 0s}
+    .orb.orb-2{width:180px;height:180px;right:6%;top:36%;background:radial-gradient(circle at 30% 30%, rgba(120,40,255,0.18), rgba(180,90,255,0.04) 40%, transparent 60%);animation:orbFade 9s ease-in-out infinite 2s}
+    .orb.orb-3{width:260px;height:260px;left:34%;bottom:8%;background:radial-gradient(circle at 30% 30%, rgba(150,80,255,0.26), rgba(200,120,255,0.05) 40%, transparent 60%);animation:orbFade 11s ease-in-out infinite 4s}
+    @keyframes orbFade{0%{opacity:0;transform:scale(0.92)}10%{opacity:0.6;transform:scale(1)}45%{opacity:0.25;transform:scale(1.03)}75%{opacity:0.08}100%{opacity:0}}
+  }
+</style></head>
+<body>
+<div id="mobileBg" aria-hidden="true"></div><header>
+  <div class="brand" id="brand">Nej_Studio</div>
+  <nav aria-label="Головна навігація" class="main-nav">
+    <a class="nav-link" href="#home">Головна</a>
+    <a class="nav-link" href="#services">Послуги</a>
+    <a class="nav-link" href="#pricing">Ціни</a>
+        <a class="nav-link" href="#socials">Соцмережі</a>
+    <a class="nav-link" href="#contact">Контакт</a>
+  </nav>  <div class="header-actions">
+    <button id="soonBtn" class="header-btn" aria-haspopup="dialog">Soon</button>
+    <button id="musicControl" class="music-btn" aria-pressed="false" title="Управління музикою">▶</button>
+  </div>
+</header><div id="entryOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Вступний екран">
+  <div class="overlay-inner">
+    <h1 class="overlay-title">Nej_Studio</h1>
+    <p class="overlay-sub">Креативна студія — сайти, брендинг, візитки</p>
+    <button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+  </div>
+</div><main id="mainContent" class="site-main" tabindex="-1" aria-hidden="true">
+  <section class="hero" id="home" aria-labelledby="hero-title">
+    <h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
+    <p class="lead">Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
+  </section>  <section id="services" class="services" aria-labelledby="services-title">
+    <h2 id="services-title">Що ми пропонуємо</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Web-дизайн</h3>
+        <p>Адаптивні сайти, лендінги, портфоліо — чистий код і приємний UX.</p>
+      </article><article class="card">
     <h3>Брендинг</h3>
-
     <p>Логотипи, айдентика, візуальна стратегія для впізнаваності бізнесу.</p>
-
   </article>
-
-
 
   <article class="card">
-
     <h3>Дизайн візиток</h3>
-
     <p>Унікальні візитки, що відповідають айдентиці та стилю компанії.</p>
-
   </article>
-
 </div>
 
-  </section>  <!-- PRICING SECTION -->  <section id="pricing" class="pricing-section" aria-labelledby="pricing-title"><h2 id="pricing-title" class="pricing-title">Ціни на розробку</h2>
-
-
-
-<div class="pricing-grid">
-
+  </section>  <section id="pricing" class="pricing-section" aria-labelledby="pricing-title">
+    <h2 id="pricing-title" class="pricing-title">Ціни на розробку</h2><div class="pricing-grid">
   <div class="price-card">
-
     <h3>Створення сайту</h3>
-
-    <p class="price">2500 – 5000 грн</p>
-
-    <p class="desc">Повна розробка сучасного, адаптивного сайту (2–5 сторінок). Динамічні елементи, базова SEO-підготовка.</p>
-
-    <button class="details-btn" onclick="openMore('pricing')">Детальніше</button>
-
+    <p class="price">500 – 1000 грн / екран</p>
+    <p class="desc"><strong>Прайс</strong>: базова одиниця — екран (екран = одна секція або сторінка типу \"Головна\", \"Послуги\", \"Контакти\"). Мінімальна робота — 1 екран.</p>
+    <p class="desc">Приклад пакетів:
+      <ul>
+        <li>1 екран — 500–1000 грн</li>
+        <li>3–4 екрани — ~1500–3600 грн</li>
+        <li>5–7 екранів — 3000–4500 грн (пакет)</li>
+      </ul>
+    </p>
+    <p class="desc">У вартість включено: адаптивний дизайн, верстка, контактна форма, базова SEO-підготовка. Уточнюється під проєкт.</p>
+    <button class="details-btn btn-3d" onclick="openMore('pricing')">Детальніше</button>
   </div>
-
-
 
   <div class="price-card">
-
-    <h3>Викладення сайту в мережу</h3>
-
-    <p class="price">1000 грн</p>
-
-    <p class="desc">Розміщення на хостингу, підключення домену, налаштування HTTPS.</p>
-
-    <button class="details-btn" onclick="openMore('pricing')">Детальніше</button>
-
+    <h3>Додатково</h3>
+    <p class="price">Реєстрація на GitHub / Альтернативні варіанти</p>
+    <p class="desc">Ми можемо зареєструвати ваш сайт і розмістити його на GitHub Pages (безкоштовно). Якщо вам не підходить безкоштовний хостинг — ми можемо надати ZIP-пакет із сайтом, або допомогти з придбанням і налаштуванням платного хостингу (за домовленістю).</p>
+    <p class="desc">При необхідності: наповнення контентом, інтеграції та підтримка — за окремою домовленістю.</p>
+    <button class="details-btn btn-3d" onclick="openMore('pricing')">Детальніше</button>
   </div>
-
 </div>
 
-  </section>  <!-- SOCIALS -->  <section id="socials" class="services" aria-labelledby="social-title"><h2 id="social-title">Соціальні мережі</h2>
-
-<div class="grid">
-
-  <a class="card link-card" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank" rel="noopener noreferrer">
-
-    <h3>Instagram</h3>
-
-    <p>Наш офіційний профіль — приклади робіт і процесу. Натисніть, щоб перейти.</p>
-
-  </a>
-
-</div>
-
-  </section>  <!-- FOOTER / CONTACT -->  <footer id="contact" class="services" aria-labelledby="contact-title"><h2 id="contact-title">Контакт</h2>
-
-<p>Зв'язатися:
-
-  <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink" title="Написати на marcus395k@gmail.com">marcus395k@gmail.com</a>
-
-</p>
-
-<p class="small">© 2025 Nej_Studio — Всі права належать тільки Nej_Studio</p>
-
-  </footer></main><!-- PANEL CONTAINER: зараз тільки прайс (відкривається через openMore) --><div id="panelContainer" class="panel-container" aria-hidden="true">  <div class="panel panel--pricing" data-panel="pricing" role="region" aria-label="Прайс"><button class="panel-close" data-close>← Назад</button>
-
-<div class="panel-inner">
-
-  <h2>Деталі по цінах</h2>
-
-  <div class="panel-grid">
-
-    <div class="panel-card">
-
-      <strong>2500 – 5000 грн</strong>
-
-      <div>Повна розробка сайту (2–5 сторінок). Включає: дизайн, адаптивність, контактну форму, базову SEO-підготовку. Ціна залежить від складності.</div>
-
+  </section>  <section id="socials" class="services" aria-labelledby="social-title">
+    <h2 id="social-title">Соціальні мережі</h2>
+    <div class="grid">
+      <a class="card link-card" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank" rel="noopener noreferrer">
+        <h3>Instagram</h3>
+        <p>Наш офіційний профіль — приклади робіт і процесу. Натисніть, щоб перейти.</p>
+      </a>
     </div>
-
-    <div class="panel-card">
-
-      <strong>1000 грн</strong>
-
-      <div>Викладення сайту в інтернет: налаштування хостингу, домен, SSL.</div>
-
-    </div>
-
-  </div>
-
-
-
-  <div style="margin-top:20px;">
-
+  </section>  <footer id="contact" class="services" aria-labelledby="contact-title">
+    <h2 id="contact-title">Контакт</h2>
+    <p>Зв'язатися:
+      <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink" title="Написати на marcus395k@gmail.com">marcus395k@gmail.com</a>
+    </p>
+    <p class="small">© 2025 Nej_Studio — Всі права належать тільки Nej_Studio</p>
+  </footer>
+</main><div id="panelContainer" class="panel-container" aria-hidden="true">
+  <div class="panel panel--pricing" data-panel="pricing" role="region" aria-label="Прайс">
+    <button class="panel-close" data-close>← Назад</button>
+    <div class="panel-inner">
+      <h2>Деталі по цінах</h2>
+      <div class="panel-grid">
+        <div class="panel-card">
+          <strong>500 – 1000 грн / екран</strong>
+          <div>Ціна за один екран. Кінцева вартість залежить від дизайну, анімацій та інтеграцій.</div>
+        </div>
+        <div class="panel-card">
+          <strong>5–7 екранів — 3000 – 4500 грн</strong>
+          <div>Пакетна знижка для середніх сайтів. Включає дизайн, верстку, базову оптимізацію та форму зв'язку.</div>
+        </div>
+        <div class="panel-card">
+          <strong>Додаткові роботи</strong>
+          <div>Наповнення контентом, інтеграції — за окремим прайсом або підпискою. Ми також реєструємо сайти на GitHub Pages та налаштовуємо репозиторій під деплой. Якщо безкоштовний хостинг вам не підходить — ми можемо скинути вам повну папку сайту або допомогти з придбанням платного хостингу і його налаштуванням.</div>
+        </div>
+        </div>
+      </div><div style="margin-top:20px; text-align:center;">
     <a class="email-link" href="mailto:marcus395k@gmail.com">Замовити / Запитати — marcus395k@gmail.com</a>
-
   </div>
-
 </div>
 
-  </div></div><!-- SOON modal --><div id="soonModal" class="modal" aria-hidden="true">  <div class="modal-content" role="dialog" aria-modal="true" aria-label="Soon"><button id="closeSoon" class="close-btn" aria-label="Закрити модальне вікно">✖</button>
-
-<h1>soon</h1>
-
-<p>Тут будуть нові функції — слідкуйте за оновленнями.</p>
-
-  </div></div><!-- TOAST --><div id="toast" class="toast" role="status" aria-live="polite"></div><script src="script.js"></script></body></html>  
-Css назви файлів указані мають бути в скриптах / /* style.css — оновлений, сучасний, responsive *//* Variables */
-
-:root{
-
---violet:#6a00ff;
-
---violet-2:#8b3cff;
-
---dark:#0b0e15;
-
---accent:#4cc9f0;
-
---text:#eef6ff;
-
---muted:rgba(238,246,255,0.78);
-
---panel-bg:linear-gradient(135deg,var(--violet),var(--dark));
-
---shadow:0 18px 48px rgba(8,8,20,0.6);
-
---radius:14px;
-
-}
-
-/* Reset */
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-html,body{height:100%}
-
-body{
-
-font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-
-color:var(--text);
-
-background:
-
-radial-gradient(circle at 18% 20%, var(--violet) 0%, var(--dark) 55%),
-
-radial-gradient(circle at 82% 70%, #4a0080 0%, transparent 60%),
-
-var(--dark);
-
--webkit-font-smoothing:antialiased;
-
-line-height:1.45;
-
-overflow-x:hidden;
-
-}
-
-/* Header */
-
-header{
-
-position:fixed;inset:0 0 auto 0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;
-
-background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-
-border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(8px);z-index:70;
-
-}
-
-.brand{font-weight:800;font-size:18px}
-
-.main-nav{display:flex;gap:12px;align-items:center}
-
-.nav-link{color:var(--muted);font-weight:700;padding:8px 10px;border-radius:8px;transition:all .16s}
-
-.nav-link:hover{color:var(--accent);transform:translateY(-3px)}
-
-.header-actions{display:flex;gap:10px;align-items:center}
-
-.header-btn, .music-btn{padding:8px 12px;border-radius:10px;border:0;font-weight:800;cursor:pointer;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;box-shadow:0 10px 30px rgba(106,0,255,0.12)}
-
-/* Overlay */
-
-#entryOverlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:120;padding:22px;text-align:center;background:linear-gradient(180deg, rgba(3,6,12,0.65), rgba(3,6,12,0.9))}
-
-.overlay-inner{max-width:920px}
-
-.overlay-title{font-size:48px;margin-bottom:8px}
-
-.overlay-sub{color:var(--muted);margin-bottom:18px}
-
-.go-btn{padding:16px 40px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;box-shadow:0 22px 60px rgba(106,0,255,0.22);cursor:pointer}
-
-/* Main */
-
-main{padding-top:92px}
-
-.site-main[aria-hidden="true"]{filter:blur(4px);pointer-events:none}
-
-.hero{min-height:60vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 6% 40px}
-
-.hero h1{font-size:48px;max-width:980px;text-shadow:0 8px 30px rgba(0,0,0,0.6);margin-bottom:10px}
-
-.lead{color:var(--muted);max-width:760px;margin:0 auto 18px}
-
-/* Services */
-
-.services{padding:48px 6%}
-
-.services h2{font-size:28px;margin-bottom:18px}
-
-.grid{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:var(--shadow)}
-
-.card h3{color:var(--accent);margin-bottom:8px}
-
-.card p{color:var(--muted)}
-
-/* Pricing */
-
-.pricing-section{padding:48px 6%;text-align:center}
-
-.pricing-title{font-size:32px;font-weight:800;margin-bottom:18px}
-
-.pricing-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
-
-.price-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:22px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);box-shadow:var(--shadow)}
-
-.price-card h3{color:var(--accent);margin-bottom:8px}
-
-.price{font-size:24px;font-weight:800;color:var(--accent);margin:12px 0}
-
-.desc{color:var(--muted);margin-bottom:14px}
-
-.details-btn{padding:10px 18px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;cursor:pointer}
-
-/* Socials */
-
-.link-card{display:block;color:inherit;text-decoration:none}
-
-.link-card p{opacity:0.9}
-
-/* Footer / contact */
-
-footer{padding:36px 6%;text-align:center;border-top:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent)}
-
-footer p{opacity:0.9}
-
-.small{opacity:0.7;font-size:13px;margin-top:8px}
-
-.email-link{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 48px rgba(106,0,255,0.18)}
-
-/* Panel (pricing) full screen */
-
-.panel-container{position:fixed;inset:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;z-index:140;padding:0;background:rgba(0,0,0,0.6)}
-
-.panel-container[aria-hidden="false"]{display:flex}
-
-.panel{width:100%;height:100%;max-width:none;background:var(--panel-bg);border-radius:0;padding:40px;box-shadow:none;display:flex;flex-direction:column;position:relative;overflow-y:auto}
-
-.panel-close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,0.08);color:#fff;border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
-
-.panel-inner{margin-top:10px;color:var(--text)}
-
-.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:18px}
-
-.panel-card{background:rgba(255,255,255,0.04);padding:14px;border-radius:12px;text-align:center}
-
-/* Modal soon */
-
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:160;padding:22px}
-
-.modal[aria-hidden="false"]{display:flex}
-
-.modal-content{width:100%;max-width:720px;background:var(--panel-bg);border-radius:16px;padding:24px;box-shadow:0 36px 90px rgba(8,8,20,0.7);text-align:center}
-
-.close-btn{position:absolute;right:18px;top:18px;background:transparent;border:0;color:var(--text);font-size:20px;cursor:pointer}
-
-/* Toast */
-
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:rgba(0,0,0,0.6);color:#fff;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;z-index:300;transition:opacity .22s}
-
-.toast.show{opacity:1;pointer-events:auto}
-
-/* Responsive */
-
-@media (max-width:920px){
-
-.overlay-title{font-size:40px}
-
-.hero h1{font-size:36px}
-
-.go-btn{padding:14px 32px}
-
-header{padding:0 4%}
-
-.panel{padding:28px}
-
-}
-
-@media (max-width:720px){
-
-.overlay-title{font-size:32px}
-
-.hero h1{font-size:28px}
-
-.panel{padding:18px}
-
-.main-nav{gap:8px}
-
-.nav-link{padding:6px 8px;font-size:14px}
-
-.email-link{padding:10px 12px;font-size:15px}
-
-}
-Js / // script.js — оновлений: smooth anchors, overlay, music, pricing panel, soon modal, toast
-
+  </div>
+</div><div id="soonModal" class="modal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-label="Soon">
+    <button id="closeSoon" class="close-btn" aria-label="Закрити модальне вікно">✖</button>
+    <h1>soon</h1>
+    <p>Тут будуть нові функції — слідкуйте за оновленнями.</p>
+  </div>
+</div><div id="toast" class="toast" role="status" aria-live="polite"></div><script>
+// script.js — оновлений: smooth anchors, overlay, music, pricing panel, soon modal, toast
 const $ = s => document.querySelector(s);
-
 const $$ = s => Array.from(document.querySelectorAll(s));
 
-/* Toast helper */
-
 function showToast(text, ms = 3000){
-
-let toast = $('#toast');
-
-if(!toast){
-
-toast = document.createElement('div');
-
-toast.id = 'toast';
-
-toast.className = 'toast';
-
-document.body.appendChild(toast);
-
+  let toast = $('#toast');
+  if(!toast){ toast = document.createElement('div'); toast.id = 'toast'; toast.className='toast'; document.body.appendChild(toast); }
+  toast.textContent = text; toast.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(()=> toast.classList.remove('show'), ms);
 }
-
-toast.textContent = text;
-
-toast.classList.add('show');
-
-clearTimeout(toast._t);
-
-toast._t = setTimeout(()=> toast.classList.remove('show'), ms);
-
-}
-
-/* ENTRY OVERLAY */
 
 const entryOverlay = $('#entryOverlay');
-
 const goBtn = $('#goBtn');
-
 const mainContent = $('#mainContent');
 
 if(goBtn && entryOverlay && mainContent){
+  const enterSite = async ()=>{
+    // плавне приховування оверлея
+    entryOverlay.classList.add('hidden');
+    entryOverlay.setAttribute('aria-hidden','true');
+    entryOverlay.style.pointerEvents = 'none';
+    // даємо час на анімацію
+    setTimeout(()=>{
+      if(entryOverlay && entryOverlay.parentNode) entryOverlay.style.display='none';
+    }, 360);
 
-goBtn.addEventListener('click', async () => {
+    mainContent.setAttribute('aria-hidden','false');
+    mainContent.classList.remove('blurred');
+    try{ mainContent.focus({preventScroll:true}); }catch(e){}
 
-entryOverlay.classList.add('hidden');
+    if(window.__NejMusic){
+      try { await window.__NejMusic.play(); showToast('Музика увімкнена'); }
+      catch(e){ showToast('Автовідтворення може бути заблоковане'); }
+    }
+  };
 
-setTimeout(()=> entryOverlay.style.display='none', 420);
-
-mainContent.setAttribute('aria-hidden','false');
-
-mainContent.classList.remove('blurred');
-
-
-
-if(window.__NejMusic){
-
-  try { await window.__NejMusic.play(); showToast('Музика увімкнена'); }
-
-  catch(e){ showToast('Автовідтворення може бути заблоковане'); }
-
+  goBtn.addEventListener('click', enterSite);
+  // touchstart на мобільних щоб саме цей дот-тчак ініціалізував аудіо
+  try{ goBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); enterSite(); }, {passive:false}); }catch(e){}
+  
+  goBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') enterSite(); });
+  entryOverlay.addEventListener('click', (e)=>{ if(e.target === entryOverlay) enterSite(); });
 }
-
-});
-
-}
-
-/* MUSIC */
 
 (function initMusic(){
-
-const audio = new Audio('music.mp3');
-
-audio.loop = true;
-
-audio.preload = 'auto';
-
-audio.volume = 0.34;
-
-window.__NejMusic = audio;
-
-const musicBtn = $('#musicControl');
-
-if(musicBtn){
-
-const setIcon = (isPlaying) => musicBtn.textContent = isPlaying ? '⏸' : '▶';
-
-musicBtn.addEventListener('click', async () => {
-
-  if(audio.paused){
-
-    try { await audio.play(); setIcon(true); showToast('Музика увімкнена'); }
-
-    catch(e){ showToast('Натисніть ще раз, щоб дозволити відтворення'); }
-
-  } else {
-
-    audio.pause(); setIcon(false); showToast('Музика вимкнена');
-
+  const audio = new Audio('music.mp3'); audio.loop = true; audio.preload = 'auto'; audio.volume = 0.34; window.__NejMusic = audio;
+  const musicBtn = $('#musicControl');
+  if(musicBtn){
+    const setIcon = (isPlaying) => musicBtn.textContent = isPlaying ? '⏸' : '▶';
+    musicBtn.addEventListener('click', async () => {
+      if(audio.paused){ try { await audio.play(); setIcon(true); showToast('Музика увімкнена'); } catch(e){ showToast('Натисніть ще раз, щоб дозволити відтворення'); } }
+      else { audio.pause(); setIcon(false); showToast('Музика вимкнена'); }
+    });
   }
-
-});
-
-}
-
 })();
 
-/* SMOOTH ANCHOR SCROLL (для nav links та будь-яких #) */
+$$('a[href^="#"]').forEach(a=>{ a.addEventListener('click', (e)=>{ const href = a.getAttribute('href'); if(!href || href.length <= 1) return; e.preventDefault(); const target = document.querySelector(href); if(target){ const panelContainer = $('#panelContainer'); if(panelContainer && panelContainer.getAttribute('aria-hidden') === 'false'){ panelContainer.setAttribute('aria-hidden','true'); $$('.panel').forEach(p=> p.style.display='none'); mainContent.setAttribute('aria-hidden','false'); } target.scrollIntoView({behavior:'smooth', block:'start'}); } }); });
 
-('a[href^="#"]').forEach(a=>{
-  
-  a.addEventListener('click', (e)=>{
-  
-    const href = a.getAttribute('href');
-  
-    if(!href || href.length <= 1) return;
-  
-    e.preventDefault();
-  
-    const target = document.querySelector(href);
-  
-    if(target){
-  
-      // close panels if open
-  
-      const panelContainer = $('#panelContainer');
-  
-      if(panelContainer && panelContainer.getAttribute('aria-hidden') === 'false'){
-  
-        panelContainer.setAttribute('aria-hidden','true');
-  
-        $$('.panel').forEach(p=> p.style.display='none');
-  
-        mainContent.setAttribute('aria-hidden','false');
-  
-      }
-  
-      target.scrollIntoView({behavior:'smooth', block:'start'});
-  
-    }
-  
-  });
-  
-});
-  
-
-  
-/* PRICING PANEL (openMore function) */
-  
 const panelContainer = $('#panelContainer');
-  
 const panels = $$('.panel');
-  
 const panelCloseButtons = $$('.panel-close');
-  
 
-  
-function openPanel(name, push = true){
-  
-  if(!panelContainer) return;
-  
-  const panel = panels.find(p => p.dataset.panel === name);
-  
-  if(!panel) return;
-  
-  panelContainer.setAttribute('aria-hidden','false');
-  
-  panels.forEach(p => p.style.display = (p === panel ? 'block' : 'none'));
-  
-  mainContent.setAttribute('aria-hidden','true');
-  
-  if(push) history.pushState({panel:name}, '', `#${name}`);
-  
-}
-  
+function openPanel(name, push = true){ if(!panelContainer) return; const panel = panels.find(p => p.dataset.panel === name); if(!panel) return; panelContainer.setAttribute('aria-hidden','false'); panelContainer.classList.add('open'); panels.forEach(p => p.classList.toggle('active', p === panel)); mainContent.setAttribute('aria-hidden','true'); try{ const focusable = panel.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])'); if(focusable.length) focusable[0].focus(); }catch(e){} if(push) history.pushState({panel:name}, '', `#${name}`); }
 
-  
-function closePanels(push = true){
-  
-  if(!panelContainer) return;
-  
-  panelContainer.setAttribute('aria-hidden','true');
-  
-  panels.forEach(p => p.style.display='none');
-  
-  mainContent.setAttribute('aria-hidden','false');
-  
-  if(push) history.pushState({}, '', window.location.pathname);
-  
-}
-  
-
-  
-function openMore(panelName='pricing'){
-  
-  openPanel(panelName, true);
-  
-}
-  
-
-  
+function closePanels(push = true){ if(!panelContainer) return; panelContainer.setAttribute('aria-hidden','true'); panelContainer.classList.remove('open'); panels.forEach(p => p.classList.remove('active')); mainContent.setAttribute('aria-hidden','false'); if(push) history.pushState({}, '', window.location.pathname); }push = true){ if(!panelContainer) return; panelContainer.setAttribute('aria-hidden','true'); panels.forEach(p => p.style.display='none'); mainContent.setAttribute('aria-hidden','false'); if(push) history.pushState({}, '', window.location.pathname); }
+function openMore(panelName='pricing'){ openPanel(panelName, true); }
 panelCloseButtons.forEach(btn => btn.addEventListener('click', ()=> closePanels(true)));
-  
-if(panelContainer){
-  
-  panelContainer.addEventListener('click', (e)=> { if(e.target === panelContainer) closePanels(true); });
-  
-}
-  
+if(panelContainer){ panelContainer.addEventListener('click', (e)=> { if(e.target === panelContainer) closePanels(true); }); }
+window.addEventListener('popstate', (e)=>{ if(e.state && e.state.panel){ openPanel(e.state.panel, false); } else { closePanels(false); } });
+document.addEventListener('DOMContentLoaded', ()=>{ const hash = location.hash.replace('#',''); if(hash){ const panelExists = panels.find(p => p.dataset.panel === hash); if(panelExists) setTimeout(()=> openPanel(hash,false), 120); else { const target = document.getElementById(hash); if(target) setTimeout(()=> target.scrollIntoView({behavior:'smooth', block:'start'}), 120); } } });
 
-  
-/* history handling for panel */
-  
-window.addEventListener('popstate', (e)=>{
-  
-  if(e.state && e.state.panel){
-  
-    openPanel(e.state.panel, false);
-  
-  } else {
-  
-    closePanels(false);
-  
-  }
-  
-});
-  
-
-  
-/* On load: if hash equals panel name, open it; otherwise scroll to section if hash */
-  
-document.addEventListener('DOMContentLoaded', ()=>{
-  
-  const hash = location.hash.replace('#','');
-  
-  if(hash){
-  
-    const panelExists = panels.find(p => p.dataset.panel === hash);
-  
-    if(panelExists) setTimeout(()=> openPanel(hash,false), 120);
-  
-    else {
-  
-      const target = document.getElementById(hash);
-  
-      if(target) setTimeout(()=> target.scrollIntoView({behavior:'smooth', block:'start'}), 120);
-  
-    }
-  
-  }
-  
-});
-  
-
-  
-/* SOON modal (focus-trap, ESC) */
-  
 const soonBtn = $('#soonBtn');
-  
 const soonModal = $('#soonModal');
-  
 const closeSoon = $('#closeSoon');
-  
+function openModal(modal){ if(!modal) return; modal.setAttribute('aria-hidden','false'); modal.style.display='flex'; modal._previouslyFocused = document.activeElement; const focusable = modal.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])'); modal._focusable = Array.from(focusable); if(modal._focusable.length) modal._focusable[0].focus(); modal._handleKey = (e)=>{ if(e.key !== 'Tab') return; const f = modal._focusable; const idx = f.indexOf(document.activeElement); if(e.shiftKey){ if(idx === 0){ e.preventDefault(); f[f.length - 1].focus(); } } else { if(idx === f.length - 1){ e.preventDefault(); f[0].focus(); } } }; document.addEventListener('keydown', modal._handleKey); showToast('Відкрито'); }
+function closeModal(modal){ if(!modal) return; modal.setAttribute('aria-hidden','true'); modal.style.display='none'; try{ if(modal._previouslyFocused) modal._previouslyFocused.focus(); }catch(e){} if(modal._handleKey){ document.removeEventListener('keydown', modal._handleKey); modal._handleKey = null; } showToast('Закрито'); }
+if(soonBtn && soonModal){ soonBtn.addEventListener('click', ()=> openModal(soonModal)); if(closeSoon) closeSoon.addEventListener('click', ()=> closeModal(soonModal)); soonModal.addEventListener('click', (e)=> { if(e.target === soonModal) closeModal(soonModal); }); document.addEventListener('keydown', (e)=> { if(e.key === 'Escape' && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal); }); }
 
-  
-function openModal(modal){
-  
-  if(!modal) return;
-  
-  modal.setAttribute('aria-hidden','false');
-  
-  modal.style.display='flex';
-  
-  modal._previouslyFocused = document.activeElement;
-  
-  const focusable = modal.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
-  
-  modal._focusable = Array.from(focusable);
-  
-  if(modal._focusable.length) modal._focusable[0].focus();
-  
-  modal._handleKey = (e)=>{ if(e.key !== 'Tab') return; const f = modal._focusable; const idx = f.indexOf(document.activeElement);
-  
-    if(e.shiftKey){ if(idx === 0){ e.preventDefault(); f[f.length - 1].focus(); } }
-  
-    else { if(idx === f.length - 1){ e.preventDefault(); f[0].focus(); } } };
-  
-  document.addEventListener('keydown', modal._handleKey);
-  
-  showToast('Відкрито');
-  
-}
-  
+if(!$('#toast')){ const t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
 
-  
-function closeModal(modal){
-  
-  if(!modal) return;
-  
-  modal.setAttribute('aria-hidden','true');
-  
-  modal.style.display='none';
-  
-  try{ if(modal._previouslyFocused) modal._previouslyFocused.focus(); }catch(e){}
-  
-  if(modal._handleKey){ document.removeEventListener('keydown', modal._handleKey); modal._handleKey = null; }
-  
-  showToast('Закрито');
-  
-}
-  
+// Підлаштування під висоту вьюпорту (fix для мобільних, де 100vh некоректний)
+function setVh(){ document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); }
+setVh();
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', ()=>{ setTimeout(setVh, 140); });
 
-  
-if(soonBtn && soonModal){
-  
-  soonBtn.addEventListener('click', ()=> openModal(soonModal));
-  
-  if(closeSoon) closeSoon.addEventListener('click', ()=> closeModal(soonModal));
-  
-  soonModal.addEventListener('click', (e)=> { if(e.target === soonModal) closeModal(soonModal); });
-  
-  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape' && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal); });
-  
-}
-  
+// Закрити панелі / модалки через ESC
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ if(panelContainer && panelContainer.classList.contains('open')) closePanels(true); if(soonModal && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal); } });
 
-  
-/* ensure toast exists */
-  
-if(!$('#toast')){
-  
-  const t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t);
-  
+
+
+// touch-friendly 3d effect: додаємо клас .pressed на touchstart, прибираємо на touchend/cancel
+function initTouch3D(){
+  const els = Array.from(document.querySelectorAll('button, .details-btn, .go-btn, .email-link'));
+  els.forEach(el=>{
+    el.addEventListener('touchstart', ()=> el.classList.add('pressed'), {passive:true});
+    el.addEventListener('touchend', ()=> el.classList.remove('pressed'));
+    el.addEventListener('touchcancel', ()=> el.classList.remove('pressed'));
+  });
 }
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initTouch3D); else initTouch3D();
+
+
+// Mobile background init
+function initMobileBg(){
+  const mb = document.getElementById('mobileBg');
+  if(!mb) return;
+  if(window.matchMedia && !window.matchMedia('(max-width:720px)').matches) return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(mb._inited) return; mb._inited = true;
+  const createOrb = cls => { const s = document.createElement('span'); s.className = 'orb ' + cls; mb.appendChild(s); };
+  createOrb('orb-1'); createOrb('orb-2'); createOrb('orb-3');
+}
+document.addEventListener('DOMContentLoaded', initMobileBg);
+window.addEventListener('resize', ()=>{ if(window.matchMedia && window.matchMedia('(max-width:720px)').matches) initMobileBg(); });
+
+</script></body>
+</html>
