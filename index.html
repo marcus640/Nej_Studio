@@ -30,6 +30,147 @@
     -webkit-font-smoothing:antialiased;
     line-height:1.45;overflow-x:hidden;
   }
+
+  /* --- NEW: moving purple soft layers (big glows) --- */
+  #starLayers{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:8; /* під header (70) */
+    mix-blend-mode:screen;
+  }
+  .star-layer{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(64px);
+    opacity:0;
+    will-change:opacity, transform;
+    animation-name:starPulse;
+    animation-timing-function:ease-in-out;
+    animation-iteration-count:infinite;
+    animation-direction:alternate;
+    transform-origin:center;
+  }
+  .star-layer.l1{
+    width:70vmax; height:70vmax;
+    left:-8%; top:-6%;
+    background: radial-gradient(circle at 30% 30%, rgba(106,0,255,0.22), rgba(139,60,255,0.06) 40%, transparent 65%);
+    animation-duration:20s;
+    animation-delay:0s;
+  }
+  .star-layer.l2{
+    width:56vmax; height:56vmax;
+    right:-6%; top:18%;
+    background: radial-gradient(circle at 30% 30%, rgba(140,60,255,0.14), rgba(76,201,240,0.02) 40%, transparent 65%);
+    animation-duration:26s;
+    animation-delay:3s;
+  }
+  .star-layer.l3{
+    width:82vmax; height:82vmax;
+    left:18%; bottom:-10%;
+    background: radial-gradient(circle at 30% 30%, rgba(150,80,255,0.10), rgba(200,120,255,0.04) 40%, transparent 70%);
+    animation-duration:34s;
+    animation-delay:6s;
+  }
+  @keyframes starPulse{
+    0%   { opacity:0.02; transform:scale(0.96) translateY(0px); }
+    22%  { opacity:0.48; transform:scale(1.00) translateY(-8px); }
+    50%  { opacity:0.24; transform:scale(1.03) translateY(6px); }
+    78%  { opacity:0.08; transform:scale(1.01) translateY(-4px); }
+    100% { opacity:0.02; transform:scale(0.98) translateY(0px); }
+  }
+
+  /* --- NEW: many small twinkling stars (pseudo-elements with box-shadow) --- */
+  #starField{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9; /* над soft layers, під header */
+    mix-blend-mode:screen;
+    opacity:0.95;
+  }
+  /* tiny star base: single tiny dot, box-shadows render many copies */
+  #starField::before,
+  #starField::after{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:2px; height:2px;
+    border-radius:50%;
+    background:rgba(255,240,255,0.95);
+    filter:drop-shadow(0 0 6px rgba(160,110,255,0.45));
+    /* animations differ below */
+  }
+
+  /* first scatter (warmer violet) */
+  #starField::before{
+    box-shadow:
+      4vw 8vh 0 rgba(210,170,255,0.95),
+      12vw 14vh 0 rgba(200,160,255,0.9),
+      18vw 42vh 0 rgba(230,190,255,0.95),
+      26vw 22vh 0 rgba(210,170,255,0.85),
+      34vw 58vh 0 rgba(200,150,255,0.9),
+      44vw 12vh 0 rgba(220,180,255,0.95),
+      52vw 36vh 0 rgba(210,170,255,0.9),
+      60vw 50vh 0 rgba(200,160,255,0.85),
+      72vw 18vh 0 rgba(230,200,255,0.95),
+      84vw 46vh 0 rgba(210,170,255,0.9),
+      6vw 66vh 0 rgba(200,150,255,0.85),
+      14vw 78vh 0 rgba(220,180,255,0.95),
+      22vw 6vh 0 rgba(210,170,255,0.9),
+      30vw 30vh 0 rgba(200,160,255,0.85),
+      38vw 52vh 0 rgba(230,190,255,0.95),
+      46vw 70vh 0 rgba(210,170,255,0.9),
+      54vw 80vh 0 rgba(200,150,255,0.85),
+      66vw 62vh 0 rgba(220,180,255,0.95),
+      74vw 8vh 0 rgba(210,170,255,0.9),
+      88vw 72vh 0 rgba(200,160,255,0.85);
+    opacity:0.85;
+    animation: twinkleA 6.8s infinite ease-in-out;
+    transform: translateZ(0);
+  }
+
+  /* second scatter (cooler, different timing) */
+  #starField::after{
+    box-shadow:
+      2vw 20vh 0 rgba(180,140,255,0.9),
+      10vw 4vh 0 rgba(190,150,255,0.9),
+      16vw 58vh 0 rgba(200,160,255,0.9),
+      24vw 36vh 0 rgba(190,150,255,0.85),
+      32vw 10vh 0 rgba(180,140,255,0.9),
+      40vw 44vh 0 rgba(200,160,255,0.95),
+      48vw 26vh 0 rgba(190,150,255,0.85),
+      56vw 72vh 0 rgba(200,160,255,0.9),
+      64vw 14vh 0 rgba(180,140,255,0.85),
+      70vw 54vh 0 rgba(200,160,255,0.95),
+      78vw 30vh 0 rgba(190,150,255,0.9),
+      86vw 6vh 0 rgba(180,140,255,0.85),
+      92vw 62vh 0 rgba(200,160,255,0.95),
+      6vw 40vh 0 rgba(190,150,255,0.9),
+      28vw 80vh 0 rgba(180,140,255,0.85);
+    opacity:0.9;
+    animation: twinkleB 9.6s infinite ease-in-out;
+    transform: translateZ(0);
+  }
+
+  @keyframes twinkleA{
+    0%   { opacity:0.08; transform:translateY(0px) scale(1); }
+    45%  { opacity:0.95; transform:translateY(-3px) scale(1.06); }
+    100% { opacity:0.08; transform:translateY(0px) scale(1); }
+  }
+  @keyframes twinkleB{
+    0%   { opacity:0.06; transform:translateY(0px) scale(1); }
+    50%  { opacity:0.9; transform:translateY(4px) scale(1.04); }
+    100% { opacity:0.06; transform:translateY(0px) scale(1); }
+  }
+
+  /* reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce){
+    .star-layer{ animation:none !important; opacity:0.18 !important; filter:blur(44px) !important; transform:none !important;}
+    #starField::before, #starField::after{ animation:none !important; opacity:0.45 !important; filter:drop-shadow(0 0 6px rgba(120,60,255,0.25));}
+  }
+
+  /* --- original styles below (kept intact, minor z-indexes preserved) --- */
   header{position:fixed;inset:0 0 auto 0;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-bottom:1px solid rgba(255,255,255,0.03);backdrop-filter:blur(8px);z-index:70}
   .brand{font-weight:800;font-size:18px}
   .main-nav{display:flex;gap:12px;align-items:center}
@@ -94,4 +235,405 @@
   .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:rgba(0,0,0,0.6);color:#fff;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;z-index:300;transition:opacity .22s}
   .toast.show{opacity:1;pointer-events:auto}
 
-  @media (max-width:920px){.overlay-title{font-size:40px}.hero h1{font-size:36px}.go-
+  @media (max-width:920px){.overlay-title{font-size:40px}.hero h1{font-size:36px}.go-btn{padding:14px 32px}header{padding:0 4%}.panel{padding:28px}}
+  @media (max-width:720px){.overlay-title{font-size:32px}.hero h1{font-size:28px}.panel{padding:18px}.main-nav{gap:8px}.nav-link{padding:6px 8px;font-size:14px}.email-link{padding:10px 12px;font-size:15px}}
+
+  .btn-3d{transition:transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s; transform:translateZ(0); will-change:transform; box-shadow:0 12px 30px rgba(8,8,20,0.45);}
+  .btn-3d:hover{transform:translateY(-6px) scale(1.01); box-shadow:0 28px 60px rgba(8,8,20,0.6);}
+  .btn-3d:active, .btn-3d.pressed{transform:translateY(2px) scale(0.995); box-shadow:0 8px 18px rgba(8,8,20,0.35);}
+  .email-link.btn-3d{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--violet),var(--violet-2));color:#fff;font-weight:800;text-decoration:none;box-shadow:0 16px 48px rgba(106,0,255,0.18)}
+
+  /* Fluid typography */
+  html{font-size:clamp(15px, calc(12px + 0.6vw), 18px);} 
+  .overlay-inner{width:min(920px,94%);} 
+  .hero h1{font-size:clamp(24px, 4.2vw, 48px); max-width:900px;}
+  .details-btn, .header-btn, .music-btn, .go-btn{touch-action:manipulation;}
+  @media (hover: none){
+    .header-btn, .music-btn, .details-btn, .go-btn{padding:14px 18px}
+    .card p, .desc{font-size:0.95rem}
+    button{min-height:48px}
+  }
+  button{min-height:44px;min-width:44px}
+
+  @media (max-width:720px){
+    body{background:#030306;}
+    #mobileBg{position:fixed;inset:0;pointer-events:none;z-index:8;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(40px);opacity:0;transform:scale(0.9);mix-blend-mode:screen}
+    .orb.orb-1{width:220px;height:220px;left:6%;top:18%;background:radial-gradient(circle at 30% 30%, rgba(106,0,255,0.22), rgba(140,60,255,0.06) 40%, transparent 60%);animation:orbFade 7s ease-in-out infinite 0s}
+    .orb.orb-2{width:180px;height:180px;right:6%;top:36%;background:radial-gradient(circle at 30% 30%, rgba(120,40,255,0.18), rgba(180,90,255,0.04) 40%, transparent 60%);animation:orbFade 9s ease-in-out infinite 2s}
+    .orb.orb-3{width:260px;height:260px;left:34%;bottom:8%;background:radial-gradient(circle at 30% 30%, rgba(150,80,255,0.26), rgba(200,120,255,0.05) 40%, transparent 60%);animation:orbFade 11s ease-in-out infinite 4s}
+    @keyframes orbFade{0%{opacity:0;transform:scale(0.92)}10%{opacity:0.6;transform:scale(1)}45%{opacity:0.25;transform:scale(1.03)}75%{opacity:0.08}100%{opacity:0}}
+  }
+  </style>
+</head>
+<body>
+  <div id="mobileBg" aria-hidden="true"></div>
+
+  <!-- NEW: soft big purple glows -->
+  <div id="starLayers" aria-hidden="true">
+    <span class="star-layer l1"></span>
+    <span class="star-layer l2"></span>
+    <span class="star-layer l3"></span>
+  </div>
+
+  <!-- NEW: dense tiny twinkling stars -->
+  <div id="starField" aria-hidden="true"></div>
+
+<header>
+  <div class="brand" id="brand">Nej_Studio</div>
+  <nav aria-label="Головна навігація" class="main-nav">
+    <a class="nav-link" href="#home">Головна</a>
+    <a class="nav-link" href="#services">Послуги</a>
+    <a class="nav-link" href="#pricing">Ціни</a>
+    <a class="nav-link" href="#socials">Соцмережі</a>
+    <a class="nav-link" href="#contact">Контакт</a>
+  </nav>
+  <div class="header-actions">
+    <button id="soonBtn" class="header-btn" aria-haspopup="dialog">Soon</button>
+    <button id="musicControl" class="music-btn" aria-pressed="false" title="Управління музикою">▶</button>
+  </div>
+</header>
+
+<div id="entryOverlay" class="overlay" role="dialog" aria-modal="true" aria-label="Вступний екран">
+  <div class="overlay-inner">
+    <h1 class="overlay-title">Nej_Studio</h1>
+    <p class="overlay-sub">Креативна студія — сайти, брендинг, візитки</p>
+    <button id="goBtn" class="go-btn" aria-label="Увійти на сайт — Go web">go web</button>
+  </div>
+</div>
+
+<main id="mainContent" class="site-main" tabindex="-1" aria-hidden="true">
+  <section class="hero" id="home" aria-labelledby="hero-title">
+    <h1 id="hero-title">Ми створюємо стильні сайти, брендинг та сучасний дизайн</h1>
+    <p class="lead">Nej Studio — невелика креативна команда, що робить великі проєкти.</p>
+  </section>
+
+  <section id="services" class="services" aria-labelledby="services-title">
+    <h2 id="services-title">Що ми пропонуємо</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Web-дизайн</h3>
+        <p>Адаптивні сайти, лендінги, портфоліо — чистий код і приємний UX.</p>
+      </article>
+      <article class="card">
+        <h3>Брендинг</h3>
+        <p>Логотипи, айдентика, візуальна стратегія для впізнаваності бізнесу.</p>
+      </article>
+      <article class="card">
+        <h3>Дизайн візиток</h3>
+        <p>Унікальні візитки, що відповідають айдентиці та стилю компанії.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="pricing" class="pricing-section" aria-labelledby="pricing-title">
+    <h2 id="pricing-title" class="pricing-title">Ціни на розробку</h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>Створення сайту</h3>
+        <p class="price">500 – 1000 грн / екран</p>
+        <p class="desc"><strong>Прайс</strong>: базова одиниця — екран (екран = одна секція або сторінка типу "Головна", "Послуги", "Контакти"). Мінімальна робота — 1 екран.</p>
+        <p class="desc">Приклад пакетів:
+          <ul>
+            <li>1 екран — 500–1000 грн</li>
+            <li>3–4 екрани — ~1500–3600 грн</li>
+            <li>5–7 екранів — 3000–4500 грн (пакет)</li>
+          </ul>
+        </p>
+        <p class="desc">У вартість включено: адаптивний дизайн, верстка, контактна форма, базова SEO-підготовка. Уточнюється під проєкт.</p>
+        <button class="details-btn btn-3d" onclick="openMore('pricing')">Детальніше</button>
+      </div>
+
+      <div class="price-card">
+        <h3>Додатково</h3>
+        <p class="price">Реєстрація на GitHub / Альтернативні варіанти</p>
+        <p class="desc">Ми можемо зареєструвати ваш сайт і розмістити його на GitHub Pages (безкоштовно). Якщо вам не підходить безкоштовний хостинг — ми можемо надати ZIP-пакет із сайтом, або допомогти з придбанням і налаштуванням платного хостингу (за домовленістю).</p>
+        <p class="desc">При необхідності: наповнення контентом, інтеграції та підтримка — за окремою домовленістю.</p>
+        <button class="details-btn btn-3d" onclick="openMore('pricing')">Детальніше</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="socials" class="services" aria-labelledby="social-title">
+    <h2 id="social-title">Соціальні мережі</h2>
+    <div class="grid">
+      <a class="card link-card" href="https://www.instagram.com/nej_studio_?igsh=Zmg1eGZ5MGJiOXRq" target="_blank" rel="noopener noreferrer">
+        <h3>Instagram</h3>
+        <p>Наш офіційний профіль — приклади робіт і процесу. Натисніть, щоб перейти.</p>
+      </a>
+    </div>
+  </section>
+
+  <footer id="contact" class="services" aria-labelledby="contact-title">
+    <h2 id="contact-title">Контакт</h2>
+    <p>Зв'язатися:
+      <a href="mailto:marcus395k@gmail.com" class="email-link" id="emailLink" title="Написати на marcus395k@gmail.com">marcus395k@gmail.com</a>
+    </p>
+    <p class="small">© 2025 Nej_Studio — Всі права належать тільки Nej_Studio</p>
+  </footer>
+</main>
+
+<div id="panelContainer" class="panel-container" aria-hidden="true">
+  <div class="panel panel--pricing" data-panel="pricing" role="region" aria-label="Прайс" style="display:none">
+    <button class="panel-close" data-close aria-label="Назад">← Назад</button>
+    <div class="panel-inner">
+      <h2>Деталі по цінах</h2>
+      <div class="panel-grid">
+        <div class="panel-card">
+          <strong>500 – 1000 грн / екран</strong>
+          <div>Ціна за один екран. Кінцева вартість залежить від дизайну, анімацій та інтеграцій.</div>
+        </div>
+        <div class="panel-card">
+          <strong>5–7 екранів — 3000 – 4500 грн</strong>
+          <div>Пакетна знижка для середніх сайтів. Включає дизайн, верстку, базову оптимізацію та форму зв'язку.</div>
+        </div>
+        <div class="panel-card">
+          <strong>Додаткові роботи</strong>
+          <div>Наповнення контентом, інтеграції — за окремим прайсом або підпискою. Ми також реєструємо сайти на GitHub Pages та налаштовуємо репозиторій під деплой. Якщо безкоштовний хостинг вам не підходить — ми можемо скинути вам повну папку сайту або допомогти з придбанням платного хостингу і його налаштуванням.</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:20px; text-align:center;">
+      <a class="email-link" href="mailto:marcus395k@gmail.com">Замовити / Запитати — marcus395k@gmail.com</a>
+    </div>
+  </div>
+</div>
+
+<div id="soonModal" class="modal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-label="Soon">
+    <button id="closeSoon" class="close-btn" aria-label="Закрити модальне вікно">✖</button>
+    <h1>soon</h1>
+    <p>Тут будуть нові функції — слідкуйте за оновленнями.</p>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+// Утиліти
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+function showToast(text, ms = 3000){
+  let toast = $('#toast');
+  if(!toast){ toast = document.createElement('div'); toast.id = 'toast'; toast.className='toast'; document.body.appendChild(toast); }
+  toast.textContent = text; toast.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(()=> toast.classList.remove('show'), ms);
+}
+
+// Ентрі оверлей
+const entryOverlay = $('#entryOverlay');
+const goBtn = $('#goBtn');
+const mainContent = $('#mainContent');
+
+if(goBtn && entryOverlay && mainContent){
+  const enterSite = async ()=>{
+    entryOverlay.classList.add('hidden');
+    entryOverlay.setAttribute('aria-hidden','true');
+    entryOverlay.style.pointerEvents = 'none';
+    setTimeout(()=>{
+      if(entryOverlay && entryOverlay.parentNode) entryOverlay.style.display='none';
+    }, 360);
+
+    mainContent.setAttribute('aria-hidden','false');
+    try{ mainContent.focus({preventScroll:true}); }catch(e){ try{ mainContent.focus(); }catch(_){} }
+
+    if(window.__NejMusic){
+      try { await window.__NejMusic.play(); showToast('Музика увімкнена'); }
+      catch(e){ showToast('Автовідтворення може бути заблоковане'); }
+    }
+  };
+
+  goBtn.addEventListener('click', enterSite);
+  try{ goBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); enterSite(); }, {passive:false}); }catch(e){}
+  goBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') enterSite(); });
+  entryOverlay.addEventListener('click', (e)=>{ if(e.target === entryOverlay) enterSite(); });
+}
+
+// Музика
+(function initMusic(){
+  const audio = new Audio('music.mp3'); audio.loop = true; audio.preload = 'auto'; audio.volume = 0.34; window.__NejMusic = audio;
+  const musicBtn = $('#musicControl');
+  if(musicBtn){
+    const setIcon = (isPlaying) => {
+      musicBtn.textContent = isPlaying ? '⏸' : '▶';
+      musicBtn.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+    };
+    setIcon(false);
+    musicBtn.addEventListener('click', async () => {
+      if(audio.paused){ try { await audio.play(); setIcon(true); showToast('Музика увімкнена'); } catch(e){ showToast('Натисніть ще раз, щоб дозволити відтворення'); } }
+      else { audio.pause(); setIcon(false); showToast('Музика вимкнена'); }
+    });
+  }
+})();
+
+// Anchor smooth & panel close on navigate
+$$('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click', (e)=>{
+    const href = link.getAttribute('href');
+    if(!href || href.length <= 1) return;
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if(target){
+      const panelContainer = $('#panelContainer');
+      if(panelContainer && panelContainer.getAttribute('aria-hidden') === 'false'){
+        // close open panel
+        closePanels(true);
+      }
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+      // update history for anchor (keeps behavior)
+      history.pushState({}, '', href);
+    }
+  });
+});
+
+// Panel logic
+const panelContainer = $('#panelContainer');
+const panels = $$('.panel');
+const panelCloseButtons = $$('.panel-close');
+
+function openPanel(name, push = true){
+  if(!panelContainer) return;
+  const panel = panels.find(p => p.dataset.panel === name);
+  if(!panel) return;
+  // hide other panels and show this one
+  panels.forEach(p => {
+    if(p === panel){ p.style.display = ''; p.classList.add('active'); }
+    else { p.style.display = 'none'; p.classList.remove('active'); }
+  });
+  panelContainer.setAttribute('aria-hidden','false');
+  panelContainer.classList.add('open');
+  mainContent.setAttribute('aria-hidden','true');
+  try{
+    const focusable = panel.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
+    if(focusable.length) focusable[0].focus();
+  }catch(e){}
+  if(push) history.pushState({panel:name}, '', `#${name}`);
+}
+
+function closePanels(push = true){
+  if(!panelContainer) return;
+  panels.forEach(p => { p.style.display = 'none'; p.classList.remove('active'); });
+  panelContainer.setAttribute('aria-hidden','true');
+  panelContainer.classList.remove('open');
+  mainContent.setAttribute('aria-hidden','false');
+  if(push) history.pushState({}, '', window.location.pathname);
+}
+
+function openMore(panelName='pricing'){ openPanel(panelName, true); }
+
+panelCloseButtons.forEach(btn => btn.addEventListener('click', ()=> closePanels(true)));
+if(panelContainer){ panelContainer.addEventListener('click', (e)=> { if(e.target === panelContainer) closePanels(true); }); }
+
+// handle back/forward
+window.addEventListener('popstate', (e)=>{
+  if(e.state && e.state.panel){
+    openPanel(e.state.panel, false);
+  } else {
+    // if URL has hash matching a panel, open it; otherwise close
+    const hash = location.hash.replace('#','');
+    const panelExists = panels.find(p => p.dataset.panel === hash);
+    if(panelExists) openPanel(hash, false);
+    else closePanels(false);
+  }
+});
+
+// on load, open panel if hash points to it or scroll to target
+document.addEventListener('DOMContentLoaded', ()=>{
+  const hash = location.hash.replace('#','');
+  if(hash){
+    const panelExists = panels.find(p => p.dataset.panel === hash);
+    if(panelExists) setTimeout(()=> openPanel(hash,false), 120);
+    else {
+      const target = document.getElementById(hash);
+      if(target) setTimeout(()=> target.scrollIntoView({behavior:'smooth', block:'start'}), 120);
+    }
+  }
+});
+
+// Soon modal
+const soonBtn = $('#soonBtn');
+const soonModal = $('#soonModal');
+const closeSoon = $('#closeSoon');
+
+function openModal(modal){
+  if(!modal) return;
+  modal.setAttribute('aria-hidden','false');
+  modal.style.display='flex';
+  modal._previouslyFocused = document.activeElement;
+  const focusable = modal.querySelectorAll('a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])');
+  modal._focusable = Array.from(focusable);
+  if(modal._focusable.length) modal._focusable[0].focus();
+  modal._handleKey = (e)=>{
+    if(e.key !== 'Tab') return;
+    const f = modal._focusable;
+    const idx = f.indexOf(document.activeElement);
+    if(e.shiftKey){
+      if(idx === 0){ e.preventDefault(); f[f.length - 1].focus(); }
+    } else {
+      if(idx === f.length - 1){ e.preventDefault(); f[0].focus(); }
+    }
+  };
+  document.addEventListener('keydown', modal._handleKey);
+  showToast('Відкрито');
+}
+
+function closeModal(modal){
+  if(!modal) return;
+  modal.setAttribute('aria-hidden','true');
+  modal.style.display='none';
+  try{ if(modal._previouslyFocused) modal._previouslyFocused.focus(); }catch(e){}
+  if(modal._handleKey){ document.removeEventListener('keydown', modal._handleKey); modal._handleKey = null; }
+  showToast('Закрито');
+}
+
+if(soonBtn && soonModal){
+  soonBtn.addEventListener('click', ()=> openModal(soonModal));
+  if(closeSoon) closeSoon.addEventListener('click', ()=> closeModal(soonModal));
+  soonModal.addEventListener('click', (e)=> { if(e.target === soonModal) closeModal(soonModal); });
+  document.addEventListener('keydown', (e)=> { if(e.key === 'Escape' && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal); });
+}
+
+// Toast fallback
+if(!$('#toast')){ const t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
+
+// Mobile viewport fix
+function setVh(){ document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); }
+setVh();
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', ()=>{ setTimeout(setVh, 140); });
+
+// Close panels/modals with ESC
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape'){
+    if(panelContainer && panelContainer.classList.contains('open')) closePanels(true);
+    if(soonModal && soonModal.getAttribute('aria-hidden')==='false') closeModal(soonModal);
+  }
+});
+
+// touch 3D effect
+function initTouch3D(){
+  const els = Array.from(document.querySelectorAll('button, .details-btn, .go-btn, .email-link'));
+  els.forEach(el=>{
+    el.addEventListener('touchstart', ()=> el.classList.add('pressed'), {passive:true});
+    el.addEventListener('touchend', ()=> el.classList.remove('pressed'));
+    el.addEventListener('touchcancel', ()=> el.classList.remove('pressed'));
+  });
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initTouch3D); else initTouch3D();
+
+// Mobile background init
+function initMobileBg(){
+  const mb = document.getElementById('mobileBg');
+  if(!mb) return;
+  if(window.matchMedia && !window.matchMedia('(max-width:720px)').matches) return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(mb._inited) return; mb._inited = true;
+  const createOrb = cls => { const s = document.createElement('span'); s.className = 'orb ' + cls; mb.appendChild(s); };
+  createOrb('orb-1'); createOrb('orb-2'); createOrb('orb-3');
+}
+document.addEventListener('DOMContentLoaded', initMobileBg);
+window.addEventListener('resize', ()=>{ if(window.matchMedia && window.matchMedia('(max-width:720px)').matches) initMobileBg(); });
+
+</script>
+</body>
+</html>
